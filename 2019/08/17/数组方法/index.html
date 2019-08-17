@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <title>数组方法 | zhouleil 的个人博客</title>
+  <meta name="keywords" content>
+  <meta name="description" content="数组方法 | zhouleil 的个人博客">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="###关于我 test2">
+<meta property="og:type" content="website">
+<meta property="og:title" content="about">
+<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta property="og:site_name" content="zhouleil 的个人博客">
+<meta property="og:description" content="###关于我 test2">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-22T17:15:15.830Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="about">
+<meta name="twitter:description" content="###关于我 test2">
+
+
+<link rel="icon" href="/img/avatar.jpeg">
+
+<link href="/css/style.css?v=1" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1" rel="stylesheet">
+
+<link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="/js/jquery.autocomplete.min.js?v=1"></script>
+
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<script src="/js/iconfont.js?v=1"></script>
+
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="false">
+  <input class="theme_blog_path" value>
+</div>
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/" class="avatar_target">
+    <img class="avatar" src="/img/avatar.jpeg" />
+</a>
+<div class="author">
+    <span>zhouleil</span>
+</div>
+
+<div class="icon">
+    
+        
+        <a title="github" href="https://github.com/zhouleil" target="_blank">
+            
+                <svg class="iconfont-svg" aria-hidden="true">
+                    <use xlink:href="#icon-github"></use>
+                </svg>
+            
+        </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li><div class="all active">全部文章<small>(1)</small></div></li>
+    
+        
+            
+            <li><div data-rel="前端"><i class="fold iconfont icon-right"></i>前端<small>(1)</small></div>
+                
+                    <ul class="sub hide">
+                        
+                        <li><div data-rel="数据结构">数据结构<small>(0)</small></div>
+                            
+                        </li>
+                            
+                    </ul>
+                
+            </li>
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    </div>
+    <div><a style="border-right: 1px solid #fff; width: 49%"  class="about site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="1">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="back-title-list"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <form onkeydown="if(event.keyCode==13){return false;}">
+        <input class="search" type="text" placeholder="Search..." autocomplete="off"id="local-search-input" >
+        <i class="cross"></i>
+        <span>
+            <label for="tagswitch">Tags:</label>
+            <input id="tagswitch" type="checkbox" style="display: none" />
+            <i id="tagsWitchIcon"></i>
+        </span>
+    </form>
+    <div class="tags-list">
+    
+    <div class="clearfix"></div>
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="前端 "
+           href="/2019/08/17/数组方法/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="数组方法">数组方法</span>
+            <span class="post-date" title="2019-08-17 20:01:47">2019/08/17</span>
+        </a>
+        
+    </nav>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div class="post">
+    <div class="pjax">
+        <article id="post-数组方法" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">数组方法</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            
+                <a href="javascript:" data-rel="前端">前端</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+        创建时间:<time class="date" title='更新时间: 2019-08-17 21:03:50'>2019-08-17 20:01</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读:<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>push</td>
+<td>向数组的末尾添加一个或多个元素，并返回新的长度</td>
+</tr>
+<tr>
+<td>pop</td>
+<td>删除并返回数组的最后一个元素</td>
+</tr>
+<tr>
+<td>unshift</td>
+<td>向数组的头部添加一个或多个元素，并返回新的长度</td>
+</tr>
+<tr>
+<td>shift</td>
+<td>删除并返回数组的第一个元素</td>
+</tr>
+<tr>
+<td>concat</td>
+<td>连接2个或更多数组，并返回结果</td>
+</tr>
+<tr>
+<td>every</td>
+<td>对数组中的每个元素运行给定函数，如果该函数对每个元素都返回 true，则返回 true</td>
+</tr>
+<tr>
+<td>some</td>
+<td>对数组中的每个元素运行给定函数，如果任一元素返回 true，则返回 true</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>对数组中的每个元素运行给定函数，返回该函数会返回 true 的元素组成的数组</td>
+</tr>
+<tr>
+<td>forEach</td>
+<td>对数组中的每个元素运行给定函数，这个方法没有返回值</td>
+</tr>
+<tr>
+<td>join</td>
+<td>将所有的数组元素连接成一个字符串</td>
+</tr>
+<tr>
+<td>indexOf</td>
+<td>返回第一个与给定参数相等的数组元素的索引，没有找到则返回 -1</td>
+</tr>
+<tr>
+<td>lastIndexOf</td>
+<td>返回在数组中搜索到的与给定参数相等的元素的索引里最大的值，没有找到则返回 -1</td>
+</tr>
+<tr>
+<td>map</td>
+<td>对数组中的每个元素运行给定函数，返回每次函数调用的结果组成的数组</td>
+</tr>
+<tr>
+<td>reduce</td>
+<td>接受函数与初始值，返回归并值</td>
+</tr>
+<tr>
+<td>reverse</td>
+<td>颠倒数组中元素的顺序，原先第一个元素现在变成最后一个，同样原先的最后一个元素变成现在的第一个</td>
+</tr>
+<tr>
+<td>slice</td>
+<td>传人索引值，将数组里对应索引范围内的元素作为新数组返回</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>按字母顺序对数组排序，支持传入指定排序方法对函数作为参数</td>
+</tr>
+<tr>
+<td>toString</td>
+<td>将数组作为字符串返回</td>
+</tr>
+<tr>
+<td>valueOf</td>
+<td>和 toString 类似，将数组作为字符串返回</td>
+</tr>
+</tbody></table>
+<p><strong>下表给出了ES2015和ES2016新增对数组方法</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@@iterator</td>
+<td>返回一个包含数组键值对的迭代器对象，可以通过同步调用得到数组元素的键值对</td>
+</tr>
+<tr>
+<td>copyWithin</td>
+<td>复制数组中一系列元素到同一数组指定的起始位置</td>
+</tr>
+<tr>
+<td>entries</td>
+<td>返回包含数组所有键值对的 @@iterator</td>
+</tr>
+<tr>
+<td>includes</td>
+<td>如果数组中存在某个元素返回 true，否则返回 false。</td>
+</tr>
+<tr>
+<td>find</td>
+<td>根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素</td>
+</tr>
+<tr>
+<td>findIndex</td>
+<td>根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素在数组中的索引</td>
+</tr>
+<tr>
+<td>fill</td>
+<td>用静态值填充数组</td>
+</tr>
+<tr>
+<td>from</td>
+<td>根据已有数组创建一个新数组</td>
+</tr>
+<tr>
+<td>keys</td>
+<td>返回包含数组所有索引的 @@iterator</td>
+</tr>
+<tr>
+<td>of</td>
+<td>根据传人的参数创建一个新数组</td>
+</tr>
+<tr>
+<td>values</td>
+<td>返回包含数组中所有值的 @@iterator</td>
+</tr>
+</tbody></table>
+
+      
+       
+    </div>
+</article>
+
+
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>数组方法</p>
+    
+    <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="zhouleil">zhouleil</a></p>
+    <p><span class="copy-title">发布时间:</span>2019-08-17, 20:01:47</p>
+    <p><span class="copy-title">最后更新:</span>2019-08-17, 21:03:50</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/08/17/数组方法/" title="数组方法">http://yoursite.com/2019/08/17/数组方法/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">©2019 zhouleil</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full"><span class="min "></span></button>
+<button class="post-toc-menu"><span class="post-toc-menu-icons"></span></button>
+<div class="post-toc"><span class="post-toc-title">目录</span>
+    <div class="post-toc-content">
+
+    </div>
+</div>
+<a class="" id="rocket" href="javascript:void(0)"></a>
+    </div>
+</div>
+<div class="acParent"></div>
+
+</body>
+<script src="//cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+
+<script src="/js/script.js?v=1" ></script>
+<script>
+    var img_resize = 'default';
+    /*作者、标签的自动补全*/
+    $(function () {
+        $('.search').AutoComplete({
+            'data': [],
+            'itemHeight': 20,
+            'width': 418
+        }).AutoComplete('show');
+    })
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $(".post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().split('\n').length - 1, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+    .post .pjax article .article-entry>ol, .post .pjax article .article-entry>ul, .post .pjax article>ol, .post .pjax article>ul{
+        border: #e2dede solid 1px;
+        border-radius: 10px;
+        padding: 10px 32px 10px 56px;
+    }
+    .post .pjax article .article-entry li>ol, .post .pjax article .article-entry li>ul,.post .pjax article li>ol, .post .pjax article li>ul{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .post .pjax article .article-entry>ol>li, .post .pjax article .article-entry>ul>li,.post .pjax article>ol>li, .post .pjax article>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    .post .pjax article .article-entry li>ol>li, .post .pjax article .article-entry li>ul>li,.post .pjax article li>ol>li, .post .pjax article li>ul>li{
+        margin-bottom: auto;
+        margin-left: auto;
+    }
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+    .post .pjax article blockquote {
+        padding: 10px 20px;
+        background-color: white;
+        border: none;
+        border-left: 4px solid #42b983;
+        border-right: 4px solid #42b983;
+        border-radius: 10px;
+    }
+    
+
+    /*文章列表背景图*/
+    
+    .nav-right:before {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        background: url("http://img.xiangzhangshugongyi.com/FlSExUGfRSaqxkK5v42CpuI-tXAL.jpg");
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
