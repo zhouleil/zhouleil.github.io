@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>数组方法 | zhouleil 的个人博客</title>
+  <title>队列 | zhouleil 的个人博客</title>
   <meta name="keywords" content>
-  <meta name="description" content="数组方法 | zhouleil 的个人博客">
+  <meta name="description" content="队列 | zhouleil 的个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="###关于我 test2">
 <meta property="og:type" content="website">
@@ -187,9 +187,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-数组方法" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-队列" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">数组方法</h1>
+        <h1 class="article-title">队列</h1>
     
     <div class="article-meta">
         
@@ -197,7 +197,9 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="前端">前端</a>
+                <a href="javascript:" data-rel="前端">前端</a>/
+            
+                <a href="javascript:" data-rel="数据结构与算法">数据结构与算法</a>
             
         </span>
         
@@ -205,7 +207,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-08-17 21:03:50'>2019-08-17 20:01</time>
+        创建时间:<time class="date" title='更新时间: 2019-08-19 23:44:24'>2019-08-19 23:18</time>
         
     </div>
     <div class="article-meta">
@@ -227,7 +229,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#队列数据结构"><span class="toc-text">队列数据结构</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -242,144 +244,9 @@
 </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>push</td>
-<td>向数组的末尾添加一个或多个元素，并返回新的长度</td>
-</tr>
-<tr>
-<td>pop</td>
-<td>删除并返回数组的最后一个元素</td>
-</tr>
-<tr>
-<td>unshift</td>
-<td>向数组的头部添加一个或多个元素，并返回新的长度</td>
-</tr>
-<tr>
-<td>shift</td>
-<td>删除并返回数组的第一个元素</td>
-</tr>
-<tr>
-<td>concat</td>
-<td>连接2个或更多数组，并返回结果</td>
-</tr>
-<tr>
-<td>every</td>
-<td>对数组中的每个元素运行给定函数，如果该函数对每个元素都返回 true，则返回 true</td>
-</tr>
-<tr>
-<td>some</td>
-<td>对数组中的每个元素运行给定函数，如果任一元素返回 true，则返回 true</td>
-</tr>
-<tr>
-<td>filter</td>
-<td>对数组中的每个元素运行给定函数，返回该函数会返回 true 的元素组成的数组</td>
-</tr>
-<tr>
-<td>forEach</td>
-<td>对数组中的每个元素运行给定函数，这个方法没有返回值</td>
-</tr>
-<tr>
-<td>join</td>
-<td>将所有的数组元素连接成一个字符串</td>
-</tr>
-<tr>
-<td>indexOf</td>
-<td>返回第一个与给定参数相等的数组元素的索引，没有找到则返回 -1</td>
-</tr>
-<tr>
-<td>lastIndexOf</td>
-<td>返回在数组中搜索到的与给定参数相等的元素的索引里最大的值，没有找到则返回 -1</td>
-</tr>
-<tr>
-<td>map</td>
-<td>对数组中的每个元素运行给定函数，返回每次函数调用的结果组成的数组</td>
-</tr>
-<tr>
-<td>reduce</td>
-<td>接受函数与初始值，返回归并值</td>
-</tr>
-<tr>
-<td>reverse</td>
-<td>颠倒数组中元素的顺序，原先第一个元素现在变成最后一个，同样原先的最后一个元素变成现在的第一个</td>
-</tr>
-<tr>
-<td>slice</td>
-<td>传人索引值，将数组里对应索引范围内的元素作为新数组返回</td>
-</tr>
-<tr>
-<td>sort</td>
-<td>按字母顺序对数组排序，支持传入指定排序方法对函数作为参数</td>
-</tr>
-<tr>
-<td>toString</td>
-<td>将数组作为字符串返回</td>
-</tr>
-<tr>
-<td>valueOf</td>
-<td>和 toString 类似，将数组作为字符串返回</td>
-</tr>
-</tbody></table>
-<p><strong>下表给出了ES2015和ES2016新增对数组方法</strong></p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>@@iterator</td>
-<td>返回一个包含数组键值对的迭代器对象，可以通过同步调用得到数组元素的键值对</td>
-</tr>
-<tr>
-<td>copyWithin</td>
-<td>复制数组中一系列元素到同一数组指定的起始位置</td>
-</tr>
-<tr>
-<td>entries</td>
-<td>返回包含数组所有键值对的 @@iterator</td>
-</tr>
-<tr>
-<td>includes</td>
-<td>如果数组中存在某个元素返回 true，否则返回 false。</td>
-</tr>
-<tr>
-<td>find</td>
-<td>根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素</td>
-</tr>
-<tr>
-<td>findIndex</td>
-<td>根据回调函数给定的条件从数组中查找元素，如果找到则返回该元素在数组中的索引</td>
-</tr>
-<tr>
-<td>fill</td>
-<td>用静态值填充数组</td>
-</tr>
-<tr>
-<td>from</td>
-<td>根据已有数组创建一个新数组</td>
-</tr>
-<tr>
-<td>keys</td>
-<td>返回包含数组所有索引的 @@iterator</td>
-</tr>
-<tr>
-<td>of</td>
-<td>根据传人的参数创建一个新数组</td>
-</tr>
-<tr>
-<td>values</td>
-<td>返回包含数组中所有值的 @@iterator</td>
-</tr>
-</tbody></table>
+        <h4 id="队列数据结构"><a href="#队列数据结构" class="headerlink" title="队列数据结构"></a>队列数据结构</h4><p>队列是遵循<strong>先进先出（FIFO，也称为先来先服务）</strong>原则的一组有序的项。队列在尾部添加新元素，并从顶部移除元素。最新添加的元素必须排在队列的末尾。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.items = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 向队列尾部添加一个或多个新的项</span></span><br><span class="line">    enqueue(element) &#123;</span><br><span class="line">        <span class="keyword">this</span>.items[<span class="keyword">this</span>.count] = element;</span><br><span class="line">        <span class="keyword">this</span>.count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 移除队列的第一项，并返回被移除的元素</span></span><br><span class="line">    dequeue() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">delete</span> <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">this</span>.lowestCount++;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回队列中的第一个元素</span></span><br><span class="line">    peek() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">    &#125;</span><br><span class="line">    isEmpty() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count - <span class="keyword">this</span>.lowestCount === <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    size() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count - <span class="keyword">this</span>.lowestCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    clear() &#123;</span><br><span class="line">        <span class="keyword">this</span>.items = &#123;&#125;;</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">''</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> objString = <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount]&#125;</span>`</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="keyword">this</span>.lowestCount + <span class="number">1</span>; i &lt; <span class="keyword">this</span>.count; i++) &#123;</span><br><span class="line">            objString = <span class="string">`<span class="subst">$&#123;objString&#125;</span>,<span class="subst">$&#123;<span class="keyword">this</span>.items[i]&#125;</span>`</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> objString;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> queue = <span class="keyword">new</span> Queue();</span><br><span class="line">queue.enqueue(<span class="number">1</span>);</span><br><span class="line">queue.enqueue(<span class="number">2</span>);</span><br><span class="line">queue.toString(); <span class="comment">// "1,2"</span></span><br><span class="line">queue.peek(); <span class="comment">// 1</span></span><br><span class="line">queue.dequeue(); <span class="comment">// 1</span></span><br><span class="line">queue.size(); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
 
       
        
@@ -389,12 +256,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>数组方法</p>
+    <p><span class="copy-title">文章标题:</span>队列</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="zhouleil">zhouleil</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-08-17, 20:01:47</p>
-    <p><span class="copy-title">最后更新:</span>2019-08-17, 21:03:50</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/08/17/数组方法/" title="数组方法">http://yoursite.com/2019/08/17/数组方法/</a>
+    <p><span class="copy-title">发布时间:</span>2019-08-19, 23:18:37</p>
+    <p><span class="copy-title">最后更新:</span>2019-08-19, 23:44:24</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/08/19/队列/" title="队列">http://yoursite.com/2019/08/19/队列/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
