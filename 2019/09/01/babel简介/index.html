@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>about | zhouleil 的个人博客</title>
+  <title>babel简介 | zhouleil 的个人博客</title>
   <meta name="keywords" content>
-  <meta name="description" content="about | zhouleil 的个人博客">
+  <meta name="description" content="babel简介 | zhouleil 的个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta property="og:type" content="website">
 <meta property="og:title" content="文章分类">
@@ -208,19 +208,25 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-babel简介" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">about</h1>
+        <h1 class="article-title">babel简介</h1>
     
     <div class="article-meta">
         
         
+        
+        <span class="book">
+            
+                <a href="javascript:" data-rel="前端">前端</a>
+            
+        </span>
         
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-07-23 01:15:15'>2019-07-22 23:38</time>
+        创建时间:<time class="date" title='更新时间: 2019-09-01 12:39:37'>2019-09-01 11:39</time>
         
     </div>
     <div class="article-meta">
@@ -242,7 +248,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置文件-babelrc-babel-config-js"><span class="toc-text">配置文件.babelrc/babel.config.js</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -257,8 +263,31 @@
 </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###关于我</p>
-<p>test2</p>
+        <p>Babel 是一个转码器，可以将ES6转化为ES5代码，从而在现有环境运行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 转码前</span></span><br><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line">arr.map(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转码后</span></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line">arr.map(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> item + <span class="number">1</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码使用了箭头函数，这个特性还没有得到广泛的支持，Bable 将其转化为普通函数，就能在现有的 Javascript 环境执行了。</p>
+<ul>
+<li>@babel/core: 这个是babel 的核心包，核心的API都在这里。</li>
+<li>@babel/cli: 这是一个通过命令对js文件进行转换的工具。</li>
+<li>@babel/preset-env: 指定转换的工作环境，他是以前 es2015、es2016、es2017的集合，需要注意的是，@babel/preset-env不支持所有在stage-x的plugin。</li>
+<li>@babel/polyfill: 相当于一个填充，因为Babel本身只支持转换箭头函数、解构赋值这些语法糖类的语法，而一些新的API或者Promise函数等是无法转换的。 @babel/polyfill 就是解决这个问题的。全局的polyfill，而且很全能，只要不介意这个包的大小，一般建议使用该插件。在大型web项目中比较适合使用。</li>
+<li>@babel/plugin-transform-runtime：相对于 @babel/polyfill 的全局polypill, @babel/plugin-transform-runtime 则是按需引入，使用到哪些polyfill就引入哪些，但是不是全局的，避免了全局污染。开发框架或者库的时候适合使用。</li>
+</ul>
+<h4 id="配置文件-babelrc-babel-config-js"><a href="#配置文件-babelrc-babel-config-js" class="headerlink" title="配置文件.babelrc/babel.config.js"></a>配置文件.babelrc/babel.config.js</h4><p>之前版本的babel都是使用<code>.baberc</code>来做配置文件，babel7引入了<code>babel.config.js</code>。但是它并不是<code>.baberc</code>的替代品，二者根据使用的场景不同自行选择。</p>
+<p><strong>.babelrc</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"presets"</span>: [<span class="string">"@babel/preset-flow"</span>,<span class="string">"@babel/preset-react"</span>, <span class="string">"@babel/preset-typescript"</span>],</span><br><span class="line">  <span class="string">"plugins"</span>: [...]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@babel/preset-flow预设包含了类型检测插件</p>
+<p>@babel/preset-react：顾名思义，包含了react语法的插件。</p>
+<p>@babel/preset-typescript：转换ts语法</p>
+<p><strong>.Babel.config.js</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> presets = [ </span><br><span class="line">      [<span class="string">"env"</span>, &#123;</span><br><span class="line">            <span class="string">"targets"</span>: &#123; <span class="comment">//指定要转译到哪个环境</span></span><br><span class="line">                <span class="comment">//浏览器环境</span></span><br><span class="line">                <span class="string">"browsers"</span>: [<span class="string">"last 2 versions"</span>, <span class="string">"safari &gt;= 7"</span>],</span><br><span class="line">                <span class="comment">//node环境</span></span><br><span class="line">                <span class="string">"node"</span>: <span class="string">"6.10"</span>, <span class="comment">//"current"  使用当前版本的node</span></span><br><span class="line">                </span><br><span class="line">            &#125;,</span><br><span class="line">             <span class="comment">//是否将ES6的模块化语法转译成其他类型</span></span><br><span class="line">             <span class="comment">//参数："amd" | "umd" | "systemjs" | "commonjs" | false，默认为'commonjs'</span></span><br><span class="line">            <span class="string">"modules"</span>: <span class="string">'commonjs'</span>,</span><br><span class="line">            <span class="comment">//是否进行debug操作，会在控制台打印出所有插件中的log，已经插件的版本</span></span><br><span class="line">            <span class="string">"debug"</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="comment">//强制开启某些模块，默认为[]</span></span><br><span class="line">            <span class="string">"include"</span>: [<span class="string">"transform-es2015-arrow-functions"</span>],</span><br><span class="line">            <span class="comment">//禁用某些模块，默认为[]</span></span><br><span class="line">            <span class="string">"exclude"</span>: [<span class="string">"transform-es2015-for-of"</span>],</span><br><span class="line">            <span class="comment">//babel / preset-env处理polyfill的方式。</span></span><br><span class="line">            <span class="comment">//参数：usage | entry | false，默认为false.</span></span><br><span class="line">            <span class="string">"useBuiltIns"</span>: <span class="literal">false</span></span><br><span class="line">     &#125;]</span><br><span class="line"> ];</span><br><span class="line">  <span class="keyword">const</span> plugins = [ <span class="string">"@babel/transform-arrow-functions"</span> ];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    presets,</span><br><span class="line">    plugins</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>参考</strong>:</p>
+<p> <a href="http://www.ruanyifeng.com/blog/2016/01/babel.html" target="_blank" rel="noopener">Babel 入门教程</a> </p>
+<p> <a href="https://www.jianshu.com/p/0ea6065cb39e" target="_blank" rel="noopener">初识babel 7</a></p>
 
       
        
@@ -266,6 +295,18 @@
 </article>
 
 
+
+<div class="article_copyright">
+    <p><span class="copy-title">文章标题:</span>babel简介</p>
+    
+    <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="zhouleil">zhouleil</a></p>
+    <p><span class="copy-title">发布时间:</span>2019-09-01, 11:39:27</p>
+    <p><span class="copy-title">最后更新:</span>2019-09-01, 12:39:37</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/09/01/babel简介/" title="babel简介">http://yoursite.com/2019/09/01/babel简介/</a>
+    <p>
+        <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+    </p>
+</div>
 
 
 
