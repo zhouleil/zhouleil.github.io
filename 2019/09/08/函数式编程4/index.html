@@ -8,12 +8,12 @@
   
   
   
-  <title>友情链接 | zhouleil 的个人博客</title>
+  <title>函数式编程4 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="前端,函数式编程,">
   
 
   <script>
@@ -199,13 +199,20 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>友情链接</span>
+    <span>函数式编程4</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-09-07
+      2019-09-08
     </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
     
     
   </div>
@@ -214,12 +221,21 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <ul>
-<li><a href="ttps://godbmw.com" target="_blank" rel="noopener">GodBMW</a></li>
-<li><a href="https://fishedee.com" target="_blank" rel="noopener">fishedee</a></li>
-<li><a href="https://yelog.org" target="_blank" rel="noopener">叶落阁</a></li>
-<li><a href="https://huxiansheng.net" target="_blank" rel="noopener">huxiansheng</a></li>
-</ul>
+      <h5 id="数组的函数式编程"><a href="#数组的函数式编程" class="headerlink" title="数组的函数式编程"></a>数组的函数式编程</h5><p>map函数的实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="function">(<span class="params">array,fn</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> results = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> array)</span><br><span class="line">    results.push(fn(value));</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br><span class="line">map([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], x =&gt; x * x);</span><br><span class="line"><span class="comment">// =&gt; [1,4,9]</span></span><br></pre></td></tr></table></figure>
+
+<p>filter 函数的实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> filter = <span class="function">(<span class="params">array, fn</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> results = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> array) &#123;</span><br><span class="line">    (fn(value)) ? results.push(value) : <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter([<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">5</span>], x =&gt; x &gt; <span class="number">3</span>);</span><br><span class="line"><span class="comment">// =&gt; [4,5]</span></span><br></pre></td></tr></table></figure>
+
+<p>flatten函数的实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> flatten = <span class="function">(<span class="params">array</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> results = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> array) </span><br><span class="line">    results.push.apply(results, value);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br><span class="line">flatten([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]]);</span><br><span class="line"><span class="comment">// =&gt; [1,2,3]</span></span><br></pre></td></tr></table></figure>
+
+<p>reduce函数的实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reduce = <span class="function">(<span class="params">array, fn , initialValue</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> accumlator = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (initialValue === <span class="literal">undefined</span>) </span><br><span class="line">    accumlator = array[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    accumlator = initialValue;</span><br><span class="line">  <span class="keyword">if</span> (initialValue === <span class="literal">undefined</span>) </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; array.length; i++) </span><br><span class="line">      accumlator = fn(accumlator, array[i]);</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> value <span class="keyword">of</span> array)</span><br><span class="line">      accumlator = fn(accumlator, value);</span><br><span class="line">  <span class="keyword">return</span> accumlator;</span><br><span class="line">&#125;</span><br><span class="line">reduce([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>], (pre, next) =&gt; pre + next);</span><br><span class="line"><span class="comment">// =&gt; 15</span></span><br><span class="line">reduce([<span class="number">10</span>,<span class="number">20</span>], (pre, next) =&gt; pre * next, <span class="number">3</span>);</span><br><span class="line"><span class="comment">// =&gt; 600</span></span><br></pre></td></tr></table></figure>
+
+<p>zip函数的实现(只能合并较短数组的长度)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> zip = <span class="function">(<span class="params">leftArr,rightArr, fn</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">let</span> index , results = [];</span><br><span class="line">	<span class="keyword">for</span> (index = <span class="number">0</span>; index &lt; <span class="built_in">Math</span>.min(leftArr.length , rightArr.length); index++) &#123;</span><br><span class="line">    	results.push(fn(leftArr[index],rightArr[index]));</span><br><span class="line">  &#125;</span><br><span class="line">	<span class="keyword">return</span> results;		</span><br><span class="line">&#125;</span><br><span class="line">zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], (x , y) =&gt; x * y);</span><br><span class="line"><span class="comment">// =&gt; [4,10,18]</span></span><br><span class="line">zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">7</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>], (x , y) =&gt; x * y);</span><br><span class="line"><span class="comment">// =&gt; [4,10,18]</span></span><br><span class="line">zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>], (x , y) =&gt; x * y);</span><br><span class="line"><span class="comment">// =&gt; [4,10,18]</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
   </div>
@@ -231,7 +247,7 @@
         
           本文作者 : zhouleil <br/>
         
-        原文链接 : <a href="">http://yoursite.com/friends/index.html</a><br>
+        原文链接 : <a href="">http://yoursite.com/2019/09/08/函数式编程4/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -274,6 +290,18 @@
 
   <nav class="post-navigation">
     
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/09/08/函数式编程3/" target="_self">函数式编程3</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/09/08/函数式编程5/" target="_self"></a>
+        <i class="iconfont icon-next"></i>
+      </div>
     
   </nav>
 
