@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>函数式编程6 - 组合 compose | zhouleil 的个人博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,函数式编程,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">zhouleil</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a 
+              href="/"
+              target="_self"
+            >
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          
+            <a 
+              href="/archives/"
+              target="_self"
+            >
+              归档
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a 
+              href="/categories/"
+              target="_self"
+            >
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          
+            <a 
+              href="/friends/"
+              target="_self"
+            >
+              友链
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a 
+              href="/about/"
+              target="_self"
+            >
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a 
+                    href="https://github.com/zhouleil" 
+                    target="_blank"
+                  >
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>函数式编程6 - 组合 compose</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-09-10
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h5 id="函数式组合在函数式编程中被称为组合。"><a href="#函数式组合在函数式编程中被称为组合。" class="headerlink" title="函数式组合在函数式编程中被称为组合。"></a>函数式组合在函数式编程中被称为组合。</h5><p><strong><em>每个程序的输出应该是另一个尚未可知的程序的输入</em></strong></p>
+<p>我们通过基础函数组合新函数。基础函数需要遵循如下规则：</p>
+<p>​    <strong>每个基础函数都需要接受一个参数并返回数据</strong></p>
+<p>组合函数的优势在于：无须创建新的函数就可以通过基础函数解决眼前的问题。</p>
+<p>组合函数的数据流式从右至左的，最右侧的函数首先执行，将数据传递给下一个函数，以此类推…最左侧的函数最后执行。</p>
+<p>#####1、组合两个函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> data = <span class="built_in">parseFloat</span>(<span class="string">'3.56'</span>);</span><br><span class="line"><span class="keyword">let</span> number = <span class="built_in">Math</span>.round(data);</span><br><span class="line"><span class="comment">// number =&gt; 4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果用组合函数可以这么做：</span></span><br><span class="line"><span class="keyword">const</span> composeFn = <span class="function">(<span class="params">f1,f2</span>) =&gt;</span> </span><br><span class="line">	value =&gt;</span><br><span class="line">	f1(f2(value));</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> number1 = composeFn(<span class="built_in">Math</span>.round, <span class="built_in">parseFloat</span>);</span><br><span class="line"><span class="comment">// number1 等价于 value =&gt; Math.round(parseFloat(value));</span></span><br><span class="line"></span><br><span class="line">number1(<span class="string">'3.56'</span>);</span><br><span class="line"><span class="comment">// =&gt; 4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的过程就是函数式组合！我们将两个函数组合在一起以便能即时地构建出一个新函数！此处要注意的重点是，函数Math.round 或 parseFloat 直到调用 number 函数时才会执行。</span></span><br></pre></td></tr></table></figure>
+
+<p>#####2、介绍组合多个函数前，先了解下 Array.reduce()</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">accumulator , currentValue</span>) =&gt;</span> accumulator + currentValue;</span><br><span class="line"><span class="comment">// 1 + 2 + 3 + 4</span></span><br><span class="line"><span class="built_in">console</span>.log(array1.reduce(reducer));</span><br><span class="line"><span class="comment">// =&gt; 10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 5 + 1 + 2 + 3 + 4</span></span><br><span class="line"><span class="built_in">console</span>.log(array1.reduce(reducer,<span class="number">5</span>));</span><br><span class="line"><span class="comment">// =&gt; 15</span></span><br></pre></td></tr></table></figure>
+
+<p>reducer 函数接受 4 个参数：<br>1、Accumulator (acc)    必需。初始值，或者计算结束后的返回值。<br>2、Current Value (cur)  必需。 当前元素。<br>3、Current Index (idx)   可选。当前元素索引。<br>4、Source Array (src)     可选。当前元素所属的数组对象。</p>
+<h5 id="3、组合多个函数"><a href="#3、组合多个函数" class="headerlink" title="3、组合多个函数"></a>3、组合多个函数</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose = <span class="function">(<span class="params">...fns</span>) =&gt;</span></span><br><span class="line">		fns.reduce( <span class="function">(<span class="params">a,b</span>) =&gt;</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> a(b(...args)));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该函数实现的关键是： fns.reduce( (a,b) =&gt; (...args) =&gt; a(b(...args)));</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试上面的例子</span></span><br><span class="line"><span class="keyword">let</span> number2 = compose(<span class="built_in">Math</span>.round, <span class="built_in">parseFloat</span>);</span><br><span class="line">number2(<span class="string">'3.56'</span>);</span><br><span class="line"><span class="comment">// =&gt; 4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 组合多个函数，计算给定字符串的单词数是奇数还是偶数</span></span><br><span class="line"><span class="keyword">let</span> splitIntoSpaces = <span class="function"><span class="params">str</span> =&gt;</span> str.split(<span class="string">' '</span>); <span class="comment">// 分割单词</span></span><br><span class="line"><span class="keyword">let</span> count = <span class="function"><span class="params">arr</span> =&gt;</span> arr.length; <span class="comment">// 计算数组长度</span></span><br><span class="line"><span class="keyword">let</span> oddOrEven = <span class="function"><span class="params">num</span> =&gt;</span>  num % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">'even'</span> : <span class="string">'odd'</span>; <span class="comment">// 计算奇偶</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 组合这三个函数,得到新函数</span></span><br><span class="line"><span class="keyword">const</span> oddOrEvenWords = compose(oddOrEven, count, splitIntoSpaces);</span><br><span class="line">oddOrEvenWords(<span class="string">'hello your reading about composition'</span>);</span><br><span class="line"><span class="comment">// =&gt; odd</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">执行过程分析：</span></span><br><span class="line"><span class="comment">const oddOrEvenWords = compose(oddOrEven, count, splitIntoSpaces);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">oddOrEvenWords = [oddOrEven,count, splitIntoSpaces].reduce((a ,b) =&gt; &#123;</span></span><br><span class="line"><span class="comment">    console.log(a,'a'); </span></span><br><span class="line"><span class="comment">    console.log(b,'b');</span></span><br><span class="line"><span class="comment">    return (...args) =&gt; a(b(...args));</span></span><br><span class="line"><span class="comment">&#125;);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">第一次迭代 a , b 分别为 oddOrEven 和 count；</span></span><br><span class="line"><span class="comment">1、num =&gt;  num % 2 === 0 ? 'even' : 'odd' "a" 即 oddOrEven 函数；</span></span><br><span class="line"><span class="comment">2、arr =&gt; arr.length "b" 即 count 函数；</span></span><br><span class="line"><span class="comment">返回函数 (...args) =&gt; a(b(...args)) </span></span><br><span class="line"><span class="comment">即 oddOrEven 与 count 组合的新函数 newOddCount = (...args) =&gt; oddOrEven(count(...args));</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">第二次跌代 a ,b 分别为 第一次迭代的结果 newOddCount（oddOrEven 与 count 组合的新函数） 和splitIntoSpaces；</span></span><br><span class="line"><span class="comment">1、(...args) =&gt; a(b(...args)) "a" 即 newOddCount = (...args) =&gt; oddOrEven(count(...args)); </span></span><br><span class="line"><span class="comment">2、str =&gt; str.split(' ') "b" 即 splitIntoSpaces；</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">返回函数 (...args) =&gt; a(b(...args)) </span></span><br><span class="line"><span class="comment">即 oddOrEvenWords = newOddCount(splitIntoSpaces(...args));  </span></span><br><span class="line"><span class="comment">	 splitIntoSpaces(...args) 作为 newOddCount 的参数；</span></span><br><span class="line"><span class="comment">即 oddOrEvenWords = oddOrEven(count(splitIntoSpaces(...args))；</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">oddOrEvenWords('33 11 44');</span></span><br><span class="line"><span class="comment">等同于 oddOrEven(count(splitIntoSpaces('33 11 44'))；</span></span><br><span class="line"><span class="comment"> =&gt; add</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></table></figure>
+
+<p>另一种compose</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compose = <span class="function">(<span class="params">...fns</span>) =&gt;</span></span><br><span class="line">	(...args) =&gt;</span><br><span class="line">		fns.reverse().reduce(<span class="function">(<span class="params">acc,fn</span>) =&gt;</span> fn(acc), ...args);</span><br><span class="line"><span class="comment">// fns.reverse(); 为了让 最右侧函数的先执行，依次将返回结果给左侧函数作为参数。</span></span><br><span class="line"><span class="keyword">let</span> splitIntoSpaces = <span class="function"><span class="params">str</span> =&gt;</span> str.split(<span class="string">' '</span>); <span class="comment">// 分割单词</span></span><br><span class="line"><span class="keyword">let</span> count = <span class="function"><span class="params">arr</span> =&gt;</span> arr.length; <span class="comment">// 计算数组长度</span></span><br><span class="line"><span class="keyword">let</span> oddOrEven = <span class="function"><span class="params">num</span> =&gt;</span>  num % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">'even'</span> : <span class="string">'odd'</span>; <span class="comment">// 计算奇偶</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> oddOrEvenWords = compose(oddOrEven, count, splitIntoSpaces);</span><br><span class="line"><span class="comment">// oddOrEvenWords = (...args) =&gt; fns.reverse().reduce((acc,fn) =&gt; fn(acc), ...args)</span></span><br><span class="line">oddOrEvenWords(<span class="string">'hello your reading about composition'</span>);</span><br><span class="line"><span class="comment">// odd</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2019/09/10/函数式编程6/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
+  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/09/08/函数式编程4/" target="_self">函数式编程4 - 数组的函数式编程</a>
+      </div>
+    
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 7, 15).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
