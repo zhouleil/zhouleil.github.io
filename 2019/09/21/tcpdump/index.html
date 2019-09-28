@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="其他,">
+    <meta name="keywords" content="后端,Linux,">
   
 
   <script>
@@ -82,13 +82,24 @@
           
         </li>
       
-        <li class="nav-item" data-path="/archives/">
+        <li class="nav-item" data-path="/categories/前端/">
           
             <a 
-              href="/archives/"
+              href="/categories/前端/"
               target="_self"
             >
-              归档
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
             </a>
           
         </li>
@@ -100,17 +111,6 @@
               target="_self"
             >
               分类
-            </a>
-          
-        </li>
-      
-        <li class="nav-item" data-path="/friends/">
-          
-            <a 
-              href="/friends/"
-              target="_self"
-            >
-              友链
             </a>
           
         </li>
@@ -209,8 +209,8 @@
     
       <span>
         分类 : 
-          <a href="/categories/其他/">
-            其他
+          <a href="/categories/后端/">
+            后端
           </a>
       </span>
     
@@ -222,13 +222,13 @@
   <div class="article-content">
     <div class="markdown-body">
       <h4 id="抓包工具-Tcpdump"><a href="#抓包工具-Tcpdump" class="headerlink" title="抓包工具 Tcpdump"></a>抓包工具 Tcpdump</h4><p>Linux 系的系统有一个很好用的抓包工具，叫 tcpdump, 可以用来抓取网络上的 Tcp 包，例如我要抓取 8080 端口的包，可以执行以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump port 8080 -n</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump port 8080 -n</span><br></pre></td></tr></table></figure>
 
 <p>-n 的意思是端口号用数字表示，还可以加上 -v 或 -vv 显示更详细的信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump port 8080 -n -v</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump port 8080 -n -v</span><br></pre></td></tr></table></figure>
 
 <p>再如我要抓取来自特定源 IP 和发往特定目的的 IP 的包，可以用以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump src host 10.2.200.11 or dst host 10.2.200.11</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump src host 10.2.200.11 or dst host 10.2.200.11</span><br></pre></td></tr></table></figure>
 
 <p>指定 src host 和 dst host ，并用 or/and 做条件的并集和交集。</p>
 

@@ -8,12 +8,12 @@
   
   
   
-  <title>队列 | zhouleil 的个人博客</title>
+  <title>硬连接和软连接 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="前端,数据结构与算法,">
+    <meta name="keywords" content="后端,Linux,">
   
 
   <script>
@@ -199,18 +199,18 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>队列</span>
+    <span>硬连接和软连接</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-08-19
+      2019-09-28
     </span>
     
       <span>
         分类 : 
-          <a href="/categories/前端/">
-            前端
+          <a href="/categories/后端/">
+            后端
           </a>
       </span>
     
@@ -221,9 +221,16 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h4 id="队列数据结构"><a href="#队列数据结构" class="headerlink" title="队列数据结构"></a>队列数据结构</h4><p>队列是遵循<strong>先进先出（FIFO，也称为先来先服务）</strong>原则的一组有序的项。队列在尾部添加新元素，并从顶部移除元素。最新添加的元素必须排在队列的末尾。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.items = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 向队列尾部添加一个或多个新的项</span></span><br><span class="line">    enqueue(element) &#123;</span><br><span class="line">        <span class="keyword">this</span>.items[<span class="keyword">this</span>.count] = element;</span><br><span class="line">        <span class="keyword">this</span>.count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 移除队列的第一项，并返回被移除的元素</span></span><br><span class="line">    dequeue() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">delete</span> <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">this</span>.lowestCount++;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回队列中的第一个元素</span></span><br><span class="line">    peek() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount];</span><br><span class="line">    &#125;</span><br><span class="line">    isEmpty() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count - <span class="keyword">this</span>.lowestCount === <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    size() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count - <span class="keyword">this</span>.lowestCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    clear() &#123;</span><br><span class="line">        <span class="keyword">this</span>.items = &#123;&#125;;</span><br><span class="line">        <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">''</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> objString = <span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.items[<span class="keyword">this</span>.lowestCount]&#125;</span>`</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="keyword">this</span>.lowestCount + <span class="number">1</span>; i &lt; <span class="keyword">this</span>.count; i++) &#123;</span><br><span class="line">            objString = <span class="string">`<span class="subst">$&#123;objString&#125;</span>,<span class="subst">$&#123;<span class="keyword">this</span>.items[i]&#125;</span>`</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> objString;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> queue = <span class="keyword">new</span> Queue();</span><br><span class="line">queue.enqueue(<span class="number">1</span>);</span><br><span class="line">queue.enqueue(<span class="number">2</span>);</span><br><span class="line">queue.toString(); <span class="comment">// "1,2"</span></span><br><span class="line">queue.peek(); <span class="comment">// 1</span></span><br><span class="line">queue.dequeue(); <span class="comment">// 1</span></span><br><span class="line">queue.size(); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+      <h4 id="硬连接（Hard-Link"><a href="#硬连接（Hard-Link" class="headerlink" title="硬连接（Hard Link)"></a>硬连接（Hard Link)</h4><p>硬链接指通过索引节点来进行连接，在 Linux 为文件系统中，保存在磁盘分区中的文件不管是什么类型都给它分配一个编号，称为索引节点号；<br>硬链接指的就是在 Linux 中，多个文件名指向同一索引节点；<br>常见用途：通过建立硬链接到重要文件，防止误删，删除其实对应的是删除其中的一个硬链接，当文件对应的硬链接都被删除了，该文件才真正被删除；<br>注意： 默认情况下，ln 命令产生硬链接；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">vim 1.txt	<span class="comment"># 创建 1.txt</span></span><br><span class="line">1111.txt <span class="comment"># 写入1111.txt</span></span><br><span class="line"></span><br><span class="line">cp -l 1.txt 2.txt <span class="comment"># 创建 1.txt 的硬连接 2.txt</span></span><br><span class="line"></span><br><span class="line">cat 2.txt</span><br><span class="line">1111.txt </span><br><span class="line"></span><br><span class="line">vim 2.txt <span class="comment"># 在 2.txt 增加2222.txt</span></span><br><span class="line">1111.txt</span><br><span class="line">2222.txt</span><br><span class="line"></span><br><span class="line">cat 1.txt <span class="comment"># 改变 2.txt 内容后 ， 1.txt 也更着改变了</span></span><br><span class="line">1111.txt</span><br><span class="line">2222.txt</span><br><span class="line"></span><br><span class="line">rm -f 2.txt <span class="comment"># 删除 2.txt </span></span><br><span class="line"></span><br><span class="line">ls <span class="comment"># 1.txt 仍然存在</span></span><br><span class="line">1.txt </span><br><span class="line"></span><br><span class="line">cat 1.txt <span class="comment"># 内容不变</span></span><br><span class="line">1111.txt</span><br><span class="line">2222.txt</span><br></pre></td></tr></table></figure>
 
+<p><strong>创建硬链接命令：<code>cp -l 1.txt 2.txt</code> 等同于 <code>ln 1.txt 2.txt</code>   为 1.txt 建立硬链接 2.txt</strong></p>
+<h4 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h4><p>也成为符号链接（Symbolic Link），类似于 Windows 的快捷方式，其中包含的是另一个文件的位置信息；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">vim 1.txt	<span class="comment"># 创建 1.txt</span></span><br><span class="line">1111.txt <span class="comment"># 写入1111.txt</span></span><br><span class="line"></span><br><span class="line">cp -s 1.txt sLink <span class="comment"># 创建 1.txt 的软连接 sLink</span></span><br><span class="line"></span><br><span class="line">cat sLink</span><br><span class="line">1111.txt </span><br><span class="line"></span><br><span class="line">vim sLink <span class="comment"># 写入</span></span><br><span class="line">1111.txt</span><br><span class="line">2222</span><br><span class="line"></span><br><span class="line">cat 1.txt <span class="comment"># 改变 sLink 内容后 ， 1.txt 也更着改变了</span></span><br><span class="line">1111.txt</span><br><span class="line">2222.txt</span><br><span class="line"></span><br><span class="line">rm -f 1.txt <span class="comment"># 删除 1.txt </span></span><br><span class="line"></span><br><span class="line">cat sLink</span><br><span class="line">cat: sLink: 没有那个文件或目录</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建符号链接命令：<code>cp -s 2.txt sLink</code> 等同于<code>ln –s 2.txt sLink</code> # 为 2.txt 文件建立符号链接 sLink</strong></p>
+<h4 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h4><p>1、硬链接是同一文件的不同访问路径，其对应的索引节点号是一样的，删除文件其实就是删除其中的一个硬链接，如果该文件对应的硬链接都被删除了该文件才被删除，常用于保护文件；<br>2、符号链接类似于 Windows 中对应的快捷方式，删除符号链接不影响源文件，删除源文件，则对应的符号链接也没有意义；</p>
+<p><a href="https://www.jianshu.com/p/4ed5013b9193" target="_blank" rel="noopener">原文地址</a></p>
 
     </div>
   </div>
@@ -235,7 +242,7 @@
         
           本文作者 : zhouleil <br/>
         
-        原文链接 : <a href="">http://yoursite.com/2019/08/19/队列/</a><br>
+        原文链接 : <a href="">http://yoursite.com/2019/09/28/硬连接和软连接/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -281,15 +288,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/08/18/栈/" target="_self">栈</a>
+        <a href="/2019/09/21/nginx命令/" target="_self">nginx命令</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/08/21/双端队列/" target="_self">双端队列</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 

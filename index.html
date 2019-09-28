@@ -82,13 +82,24 @@
           
         </li>
       
-        <li class="nav-item" data-path="/archives/">
+        <li class="nav-item" data-path="/categories/前端/">
           
             <a 
-              href="/archives/"
+              href="/categories/前端/"
               target="_self"
             >
-              归档
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
             </a>
           
         </li>
@@ -100,17 +111,6 @@
               target="_self"
             >
               分类
-            </a>
-          
-        </li>
-      
-        <li class="nav-item" data-path="/friends/">
-          
-            <a 
-              href="/friends/"
-              target="_self"
-            >
-              友链
             </a>
           
         </li>
@@ -189,6 +189,59 @@
   
   <div class="post">
     <h1 class="article-title">
+      <a href="/2019/09/28/硬连接和软连接/">
+        <span>硬连接和软连接</span>
+      </a>
+    </h1>
+    <!-- PC端文章信息 -->
+    <div class="article-top-meta pc-view">
+      <span>
+        发布时间 : 2019-09-28
+      </span>
+    </div>
+    <!-- 移动端文章信息 -->
+    <div class="article-top-meta mobile-view">
+      <span>
+        发布 : 2019-09-28
+      </span>
+      
+        <span>
+        分类 :
+          <a href="/categories/后端/">
+            后端
+          </a>
+        </span>
+      
+      
+    </div>
+    
+    <!-- 文章简介 -->
+    <div class="article-content">
+      <div class="markdown-body article-content--inner" v-html="mdToHtml(psg.summary)">
+        如何创建文件的软连接和硬连接
+      </div>
+    </div>
+    <div class="article-footer">
+      <div class="article-meta pull-left">
+        <!-- 分类pc端可见 -->
+        <span class="pc-view">
+          
+            <i class="iconfont icon-tag"></i>分类:
+            <a href="/categories/后端/">
+              后端
+            </a>
+          </span>
+          
+        <span>
+                    
+        </span>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="article-title">
       <a href="/2019/09/21/nginx命令/">
         <span>nginx命令</span>
       </a>
@@ -207,8 +260,8 @@
       
         <span>
         分类 :
-          <a href="/categories/其他/">
-            其他
+          <a href="/categories/后端/">
+            后端
           </a>
         </span>
       
@@ -227,8 +280,8 @@
         <span class="pc-view">
           
             <i class="iconfont icon-tag"></i>分类:
-            <a href="/categories/其他/">
-              其他
+            <a href="/categories/后端/">
+              后端
             </a>
           </span>
           
@@ -260,8 +313,8 @@
       
         <span>
         分类 :
-          <a href="/categories/其他/">
-            其他
+          <a href="/categories/后端/">
+            后端
           </a>
         </span>
       
@@ -280,8 +333,8 @@
         <span class="pc-view">
           
             <i class="iconfont icon-tag"></i>分类:
-            <a href="/categories/其他/">
-              其他
+            <a href="/categories/后端/">
+              后端
             </a>
           </span>
           
@@ -454,8 +507,8 @@
   
   <div class="post">
     <h1 class="article-title">
-      <a href="/2019/09/08/函数式编程5/">
-        <span>函数式编程5 - 柯里化与偏应用</span>
+      <a href="/2019/09/08/函数式编程4/">
+        <span>函数式编程4 - 数组的函数式编程</span>
       </a>
     </h1>
     <!-- PC端文章信息 -->
@@ -507,8 +560,8 @@
   
   <div class="post">
     <h1 class="article-title">
-      <a href="/2019/09/08/函数式编程4/">
-        <span>函数式编程4 - 数组的函数式编程</span>
+      <a href="/2019/09/08/函数式编程5/">
+        <span>函数式编程5 - 柯里化与偏应用</span>
       </a>
     </h1>
     <!-- PC端文章信息 -->
@@ -642,60 +695,7 @@
     <!-- 文章简介 -->
     <div class="article-content">
       <div class="markdown-body article-content--inner" v-html="mdToHtml(psg.summary)">
-        
-      </div>
-    </div>
-    <div class="article-footer">
-      <div class="article-meta pull-left">
-        <!-- 分类pc端可见 -->
-        <span class="pc-view">
-          
-            <i class="iconfont icon-tag"></i>分类:
-            <a href="/categories/前端/">
-              前端
-            </a>
-          </span>
-          
-        <span>
-                    
-        </span>
-      </div>
-      
-    </div>
-  </div>
-  
-  <div class="post">
-    <h1 class="article-title">
-      <a href="/2019/09/08/函数式编程1/">
-        <span>函数式编程1 - 函数式编程简介</span>
-      </a>
-    </h1>
-    <!-- PC端文章信息 -->
-    <div class="article-top-meta pc-view">
-      <span>
-        发布时间 : 2019-09-08
-      </span>
-    </div>
-    <!-- 移动端文章信息 -->
-    <div class="article-top-meta mobile-view">
-      <span>
-        发布 : 2019-09-08
-      </span>
-      
-        <span>
-        分类 :
-          <a href="/categories/前端/">
-            前端
-          </a>
-        </span>
-      
-      
-    </div>
-    
-    <!-- 文章简介 -->
-    <div class="article-content">
-      <div class="markdown-body article-content--inner" v-html="mdToHtml(psg.summary)">
-        
+        接受另一函数作为其参数的函数称为高阶函数（Higher-Order Function）。
       </div>
     </div>
     <div class="article-footer">

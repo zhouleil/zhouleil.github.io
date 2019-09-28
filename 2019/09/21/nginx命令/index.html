@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="其他,">
+    <meta name="keywords" content="后端,nginx,">
   
 
   <script>
@@ -82,13 +82,24 @@
           
         </li>
       
-        <li class="nav-item" data-path="/archives/">
+        <li class="nav-item" data-path="/categories/前端/">
           
             <a 
-              href="/archives/"
+              href="/categories/前端/"
               target="_self"
             >
-              归档
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
             </a>
           
         </li>
@@ -100,17 +111,6 @@
               target="_self"
             >
               分类
-            </a>
-          
-        </li>
-      
-        <li class="nav-item" data-path="/friends/">
-          
-            <a 
-              href="/friends/"
-              target="_self"
-            >
-              友链
             </a>
           
         </li>
@@ -209,8 +209,8 @@
     
       <span>
         分类 : 
-          <a href="/categories/其他/">
-            其他
+          <a href="/categories/后端/">
+            后端
           </a>
       </span>
     
@@ -221,7 +221,7 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h4 id="nginx-常用命令"><a href="#nginx-常用命令" class="headerlink" title="nginx 常用命令"></a>nginx 常用命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx	#打开 nginx</span><br><span class="line">nginx -s reload|reopen|stop|quit	#重新加载配置|重启|停止|退出 nginx</span><br><span class="line">nginx -t	#测试配置是否有语法错误</span><br><span class="line"></span><br><span class="line">nginx [-?hvVtq] [-s signal] [-c filename] [-p prefix] [-g directives]</span><br><span class="line"></span><br><span class="line">-?,-h	        : 打开帮助信息</span><br><span class="line">-v		: 显示版本信息并退出</span><br><span class="line">-V		:	显示版本和配置选项信息，然后退出</span><br><span class="line">-t		: 检测配置文件是否有语法错误，然后退出</span><br><span class="line">-q		: 在检测配置文件期间屏蔽非错误信息</span><br><span class="line">-s signal       :给一个 nginx 主进程发生信号： stop (停止)， quit (退出)， reopen (重启) ， reload （重新加载配置文件）</span><br><span class="line">-p prefix	: 设置前缀路径（默认是： /usr/local/nginx/）</span><br><span class="line">-c filename	: 设置配置文件 （默认是： /usr/local/etc/nginx/nginx.conf）</span><br><span class="line">-g directives	: 设置配置文件外的全局命令</span><br></pre></td></tr></table></figure>
+      <h4 id="nginx-常用命令"><a href="#nginx-常用命令" class="headerlink" title="nginx 常用命令"></a>nginx 常用命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx	<span class="comment">#打开 nginx</span></span><br><span class="line">nginx -s reload|reopen|stop|quit	<span class="comment">#重新加载配置|重启|停止|退出 nginx</span></span><br><span class="line">nginx -t	<span class="comment">#测试配置是否有语法错误</span></span><br><span class="line"></span><br><span class="line">nginx [-?hvVtq] [-s signal] [-c filename] [-p prefix] [-g directives]</span><br><span class="line"></span><br><span class="line">-?,-h	        : 打开帮助信息</span><br><span class="line">-v		: 显示版本信息并退出</span><br><span class="line">-V		:	显示版本和配置选项信息，然后退出</span><br><span class="line">-t		: 检测配置文件是否有语法错误，然后退出</span><br><span class="line">-q		: 在检测配置文件期间屏蔽非错误信息</span><br><span class="line">-s signal       :给一个 nginx 主进程发生信号： stop (停止)， quit (退出)， reopen (重启) ， reload （重新加载配置文件）</span><br><span class="line">-p prefix	: 设置前缀路径（默认是： /usr/<span class="built_in">local</span>/nginx/）</span><br><span class="line">-c filename	: 设置配置文件 （默认是： /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf）</span><br><span class="line">-g directives	: 设置配置文件外的全局命令</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://www.cnblogs.com/linux-centos/p/5790506.html" target="_blank" rel="noopener">原文地址</a></p>
 
@@ -284,6 +284,12 @@
         <a href="/2019/09/21/tcpdump/" target="_self">tcpdump</a>
       </div>
     
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2019/09/28/硬连接和软连接/" target="_self">硬连接和软连接</a>
+        <i class="iconfont icon-next"></i>
+      </div>
     
   </nav>
 
