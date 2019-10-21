@@ -8,12 +8,12 @@
   
   
   
-  <title>ssh与scp | zhouleil 的个人博客</title>
+  <title>js依次打印1、2、3、4、5 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="后端,Linux,">
+    <meta name="keywords" content="前端,其他,">
   
 
   <script>
@@ -199,18 +199,18 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>ssh与scp</span>
+    <span>js依次打印1、2、3、4、5</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-10-19
+      2019-10-21
     </span>
     
       <span>
         分类 : 
-          <a href="/categories/后端/">
-            后端
+          <a href="/categories/前端/">
+            前端
           </a>
       </span>
     
@@ -221,31 +221,18 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h3 id="1、ssh-命令连接服务器"><a href="#1、ssh-命令连接服务器" class="headerlink" title="1、ssh 命令连接服务器"></a>1、ssh 命令连接服务器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh 用户名@IP地址 -p 端口号</span><br></pre></td></tr></table></figure>
+      <h4 id="正常打印"><a href="#正常打印" class="headerlink" title="正常打印"></a>正常打印</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i);</span><br><span class="line">  &#125;, i * <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 6 6 6 6 6</span></span><br></pre></td></tr></table></figure>
 
-<p>如果连接成功的话会提示你输入远程服务器的密码。全部成功之后SSH就会显示远程服务器的提示符，这时候就说明连接成功了。</p>
-<h3 id="2、scp-上传与下载文件"><a href="#2、scp-上传与下载文件" class="headerlink" title="2、scp 上传与下载文件"></a>2、scp 上传与下载文件</h3><ul>
-<li><h5 id="从服务器上下载文件"><a href="#从服务器上下载文件" class="headerlink" title="从服务器上下载文件"></a>从服务器上下载文件</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 用户名@host:文件的绝对路径 本机绝对路径</span><br></pre></td></tr></table></figure>
+<h4 id="方法1、自执行函数"><a href="#方法1、自执行函数" class="headerlink" title="方法1、自执行函数"></a>方法1、自执行函数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(i)</span><br><span class="line">    &#125;, i * <span class="number">1000</span>)</span><br><span class="line">  &#125;)(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>例子：<code>scp root@192.168.0.101:/root/test.txt /Users/home/</code></p>
-<p>从 ip 为192.168.0.101的服务器路径/root/test.txt 中的test.txt文件下载到本地/Users/home/ 目录中</p>
-</li>
-<li><h5 id="上传文件到服务器"><a href="#上传文件到服务器" class="headerlink" title="上传文件到服务器"></a>上传文件到服务器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 本机绝对路径 用户@host:绝对路径</span><br></pre></td></tr></table></figure>
+<h4 id="方法2、es6-let-块级作用域"><a href="#方法2、es6-let-块级作用域" class="headerlink" title="方法2、es6 let 块级作用域"></a>方法2、es6 let 块级作用域</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(i)</span><br><span class="line">    &#125;, i * <span class="number">1000</span>)</span><br><span class="line">  &#125;)()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>例子:    <code>scp /var/www/test.text root@192.168.0.101:/var/www/</code> </p>
-<p>把本机/var/www/目录下的 test.text 文件上传到192.168.0.101 这台服务器上的/var/www/目录中</p>
-</li>
-<li><h5 id="从服务器下载目录-在scp后面加-r"><a href="#从服务器下载目录-在scp后面加-r" class="headerlink" title="从服务器下载目录(在scp后面加-r)"></a>从服务器下载目录(在scp后面加-r)</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r  用户@host:保存文件夹的绝对路径 本机文件夹的绝对路径</span><br></pre></td></tr></table></figure>
+<h4 id="方法3、-传递地址，使用函数作用域"><a href="#方法3、-传递地址，使用函数作用域" class="headerlink" title="方法3、 传递地址，使用函数作用域"></a>方法3、 传递地址，使用函数作用域</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> output = <span class="function">(<span class="params">i</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i)</span><br><span class="line">  &#125;, i * <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  output(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>例子： <code>scp -r root@192.168.0.101:/var/www/test /var/www/</code></p>
-<p>把 192.168.0.101 这台服务器的 /var/www/test 目录 下载到本机的 /var/www 目录</p>
-</li>
-<li><h5 id="上传目录到服务器"><a href="#上传目录到服务器" class="headerlink" title="上传目录到服务器"></a>上传目录到服务器</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r 本机文件夹的绝对路径 用户@host:保存文件夹的绝对路径</span><br></pre></td></tr></table></figure>
+<h4 id="方法4、Promise-all"><a href="#方法4、Promise-all" class="headerlink" title="方法4、Promise.all"></a>方法4、Promise.all</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = []</span><br><span class="line"><span class="keyword">var</span> output = <span class="function">(<span class="params">i</span>) =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(i)</span><br><span class="line">    resolve()</span><br><span class="line">  &#125;, i * <span class="number">1000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  arr.push(output(i))</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">Promise</span>.all(arr).then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'打印完成'</span>))</span><br></pre></td></tr></table></figure>
 
-<p>例如：<code>scp -r /var/test root@192.168.0.101:/var/www/</code></p>
-<p>把本机 /var/test 目录上传到服务器的 /var/www/ 目录</p>
-</li>
-</ul>
+<h4 id="方法5、async-、await"><a href="#方法5、async-、await" class="headerlink" title="方法5、async 、await"></a>方法5、async 、await</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sleep = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> setTimeout(resolve, <span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="number">6</span>; i++) &#123;</span><br><span class="line">  	<span class="keyword">await</span> sleep()</span><br><span class="line">    <span class="built_in">console</span>.log(i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
 
     </div>
   </div>
@@ -257,7 +244,7 @@
         
           本文作者 : zhouleil <br/>
         
-        原文链接 : <a href="">http://yoursite.com/2019/10/19/ssh与scp/</a><br>
+        原文链接 : <a href="">http://yoursite.com/2019/10/21/js依次打印1、2、3、4、5/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -303,15 +290,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/09/28/硬连接和软连接/" target="_self">硬连接和软连接</a>
+        <a href="/2019/10/19/ssh与scp/" target="_self">ssh与scp</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/10/21/js依次打印1、2、3、4、5/" target="_self">js依次打印1、2、3、4、5</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
