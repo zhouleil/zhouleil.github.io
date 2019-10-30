@@ -8,12 +8,12 @@
   
   
   
-  <title>分类: 前端 | zhouleil 的个人博客</title>
+  <title>浏览器缓存 Expires 、Last-Modified、Etag | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="前端,其他,">
   
 
   <script>
@@ -184,159 +184,140 @@
   })
 </script>
 
-      <div class="container">
-  <div class="timeline">
-  <span class="archive-move-on"></span>
-  <span class="archive-page-counter">
-    
-      <span>当前位于 2/2 页</span>
-    
-  </span>
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
   
+
+<div class="post">
+  <h1 class="article-title">
+    <span>浏览器缓存 Expires 、Last-Modified、Etag</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-10-30
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
   
-    <div class="collection-title">
-      <h2>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p>​        当请求一个页面时，如果浏览器使用本地缓存，因此我们经常会看到一个HTTP请求为304状态。或者显示200状态，在chrome下标注是from cache，在火狐下会标注BFCache；</p>
+<p>​        我们希望在服务器端更新了静态文件（如css、js、图片），能够在客户端得到及时的更新，但又不想让浏览器每次请求都从服务器端获取静态资源。那么就需要了解一些下面的知识：</p>
+<h4 id="1、Last-Modified-If-Modified-Since"><a href="#1、Last-Modified-If-Modified-Since" class="headerlink" title="1、Last-Modified / If-Modified-Since"></a>1、Last-Modified / If-Modified-Since</h4><p>​        当浏览器第一次请求一个url时，服务器端的返回状态码为200，同时HTTP响应头会有一个Last-Modified标记着文件在服务器端最后被修改的时间。</p>
+<img src="/2019/10/30/浏览器缓存控制/a.jpg" title="This is an example image">
+
+<p>​        浏览器第二次请求上次请求过的url时，浏览器会在HTTP请求头添加一个If-Modified-Since的标记，用来询问服务器该时间之后文件是否被修改过。</p>
+<img src="/2019/10/30/浏览器缓存控制/b.jpg" title="This is an example image">
+
+<p>​        如果服务器端的资源没有变化，则自动返回304状态，使用浏览器缓存，从而保证了浏览器不会重复从服务器端获取资源，也保证了服务器有变化是，客户端能够及时得到最新的资源。</p>
+<h4 id="2、Etag-If-None-Match"><a href="#2、Etag-If-None-Match" class="headerlink" title="2、Etag / If-None-Match"></a>2、Etag / If-None-Match</h4><p>​        当浏览器第一次请求一个url时，服务器端的返回状态码为200，同时HTTP响应头会有一个Etag，存放着服务器端生成的一个序列值。</p>
+<img src="/2019/10/30/浏览器缓存控制/a.jpg" title="This is an example image">
+
+<p>​    浏览器第二次请求上次请求过的url时，浏览器会在HTTP请求头添加一个If-None-Match的标记，用来询问服务器该文件有没有被修改。</p>
+<img src="/2019/10/30/浏览器缓存控制/b.jpg" title="This is an example image">
+
+
+
+<p>Etag 主要为了解决 Last-Modified 无法解决的一些问题:</p>
+<p>​    1、一些文件也许会周期性的更改，但是他的内容并不改变(仅仅改变的修改时间)，这个时候我们并不希望客户端认为这个文件被修改了，而重新GET;</p>
+<p>​    2、某些文件修改非常频繁，比如在秒以下的时间内进行修改，(比方说1s内修改了N次)，If-Modified-Since能检查到的粒度是s级的，这种修改无法判断(或者说UNIX记录MTIME只能精确到秒)</p>
+<p>​    3、某些服务器不能精确的得到文件的最后修改时间；</p>
+<p>使用 etag 的代价是增加了服务器的计算负担，特别是当文件比较大时。</p>
+<h4 id="3、-Cache-Control-max-age-秒-和-Expires"><a href="#3、-Cache-Control-max-age-秒-和-Expires" class="headerlink" title="3、 Cache-Control: max-age=秒 和 Expires"></a>3、 <strong>Cache-Control: max-age=秒 和 Expires</strong></h4><p>​    1、Expires = 时间，HTTP 1.0 版本，缓存的载止时间，允许客户端在这个时间之前不去检查（发请求）<br>​    2、max-age = 秒，HTTP 1.1版本，资源在本地缓存多少秒。</p>
+<p><strong>如果max-age和Expires同时存在，则被Cache-Control的max-age覆盖。</strong></p>
+<p>Expires 的一个缺点就是，返回的到期时间是服务器端的时间，这样存在一个问题，如果客户端的时间与服务器的时间相差很大，那么误差就很大，所以在HTTP 1.1版开始，使用Cache-Control: max-age=秒替代。</p>
+<p>参考：</p>
+<p>1、<a href="https://www.cnblogs.com/zhouwenhong/p/3928645.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhouwenhong/p/3928645.html</a></p>
+<p>2、<a href="https://www.cnblogs.com/fonyer/p/3953546.html" target="_blank" rel="noopener">https://www.cnblogs.com/fonyer/p/3953546.html</a></p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
         
-          <span>分类 : 前端</span>
         
-      </h2>
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2019/10/30/浏览器缓存控制/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
     </div>
   
   
   
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/08/函数式编程3/">
-          <span>函数式编程3 - 闭包与高阶函数</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-08
-      </div>
-    </header>
-  </article>
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
   
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/08/函数式编程2/">
-          <span>函数式编程2 - 函数式编程应用</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-08
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/08/函数式编程1/">
-          <span>函数式编程1 - 函数式编程简介</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-08
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/01/babel简介/">
-          <span>babel简介</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-01
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/08/22/链表/">
-          <span>链表</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        08-22
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/08/21/双端队列/">
-          <span>双端队列</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        08-21
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/08/19/队列/">
-          <span>队列</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        08-19
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/08/18/栈/">
-          <span>栈</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        08-18
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/08/17/数组方法/">
-          <span>数组方法</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        08-17
-      </div>
-    </header>
-  </article>
-  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
 </div>
-  <nav class="page-navigation">
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
     
-      <a href="/categories/前端/">上一页</a>
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/10/26/http状态/" target="_self">http状态码</a>
+      </div>
     
     
   </nav>
+
+   
+
+   
+
 </div>
+
 
       <footer>
   <p class="site-info">
