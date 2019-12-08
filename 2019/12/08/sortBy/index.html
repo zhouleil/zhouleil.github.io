@@ -8,7 +8,7 @@
   
   
   
-  <title>浏览器缓存 Expires 、Last-Modified、Etag | zhouleil 的个人博客</title>
+  <title>sortBy | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -199,12 +199,12 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>浏览器缓存 Expires 、Last-Modified、Etag</span>
+    <span>sortBy</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-10-30
+      2019-12-08
     </span>
     
       <span>
@@ -221,34 +221,13 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <p>​        当请求一个页面时，如果浏览器使用本地缓存，因此我们经常会看到一个HTTP请求为304状态。或者显示200状态，在chrome下标注是from cache，在火狐下会标注BFCache；</p>
-<p>​        我们希望在服务器端更新了静态文件（如css、js、图片），能够在客户端得到及时的更新，但又不想让浏览器每次请求都从服务器端获取静态资源。那么就需要了解一些下面的知识：</p>
-<h4 id="1、Last-Modified-If-Modified-Since"><a href="#1、Last-Modified-If-Modified-Since" class="headerlink" title="1、Last-Modified / If-Modified-Since"></a>1、Last-Modified / If-Modified-Since</h4><p>​        当浏览器第一次请求一个url时，服务器端的返回状态码为200，同时HTTP响应头会有一个Last-Modified标记着文件在服务器端最后被修改的时间。</p>
-<img src="/2019/10/30/浏览器缓存控制/a.jpg" title="This is an example image">
+      <h2 id="数组内对象按属性排序"><a href="#数组内对象按属性排序" class="headerlink" title="数组内对象按属性排序"></a>数组内对象按属性排序</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sortArr = [</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">1</span>,</span><br><span class="line">        year: <span class="number">2001</span>,</span><br><span class="line">        age: <span class="number">18</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">3</span>,</span><br><span class="line">        year: <span class="number">2002</span>,</span><br><span class="line">        age: <span class="number">17</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">3</span>,</span><br><span class="line">        year: <span class="number">1998</span>,</span><br><span class="line">        age: <span class="number">21</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">3</span>,</span><br><span class="line">        year: <span class="number">1998</span>,</span><br><span class="line">        age: <span class="number">25</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">8</span>,</span><br><span class="line">        year: <span class="number">1995</span>,</span><br><span class="line">        age: <span class="number">24</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">8</span>,</span><br><span class="line">        year: <span class="number">1997</span>,</span><br><span class="line">        age: <span class="number">22</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">8</span>,</span><br><span class="line">        year: <span class="number">1996</span>,</span><br><span class="line">        age: <span class="number">22</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        value: <span class="number">8</span>,</span><br><span class="line">        year: <span class="number">1997</span>,</span><br><span class="line">        age: <span class="number">29</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sortFn = <span class="function"><span class="keyword">function</span> (<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">sortBy</span> (<span class="params">pre, next, sortArr, index</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; key, type, isLast &#125; = sortArr[index]</span><br><span class="line">    <span class="keyword">if</span> (pre[key] &gt; next[key]) &#123;</span><br><span class="line">      <span class="keyword">return</span> type === <span class="string">'desc'</span> ? <span class="number">-1</span> : <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pre[key] &lt; next[key]) &#123;</span><br><span class="line">      <span class="keyword">return</span> type === <span class="string">'desc'</span> ? <span class="number">1</span> : <span class="number">-1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isLast) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> sortBy(pre, next, sortArr, index + <span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">pre, next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> sortBy(pre, next, arr, index)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 1、对 sortArr 按照 value 倒序排序</span></span><br><span class="line"><span class="keyword">const</span> sortWithValue = sortArr.sort(sortFn([&#123; <span class="attr">key</span>: <span class="string">'value'</span>, <span class="attr">type</span>: <span class="string">'desc'</span> ,<span class="attr">isLast</span>: <span class="literal">true</span> &#125;]))</span><br><span class="line"><span class="built_in">console</span>.log(sortWithValue)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 对 sortArr 按照， value 倒序， value 相同时按照 year 倒序， year 相同时按照 age 正序</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sortResult = sortArr.sort(sortFn(</span><br><span class="line">    [</span><br><span class="line">        &#123;</span><br><span class="line">            key: <span class="string">'value'</span>,</span><br><span class="line">            type: <span class="string">'desc'</span>,</span><br><span class="line">            isLast: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            key: <span class="string">'year'</span>,</span><br><span class="line">            type: <span class="string">'desc'</span>,</span><br><span class="line">            isLast: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            key: <span class="string">'age'</span>,</span><br><span class="line">            type: <span class="string">'asc'</span>,</span><br><span class="line">            isLast: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">))</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sortResult)</span><br></pre></td></tr></table></figure>
 
-<p>​        浏览器第二次请求上次请求过的url时，浏览器会在HTTP请求头添加一个If-Modified-Since的标记，用来询问服务器该时间之后文件是否被修改过。</p>
-<img src="/2019/10/30/浏览器缓存控制/b.jpg" title="This is an example image">
+<p>第一种排序结果如下图</p>
+<img src="/2019/12/08/sortBy/sort1.png" title="This is an example image">
 
-<p>​        如果服务器端的资源没有变化，则自动返回304状态，使用浏览器缓存，从而保证了浏览器不会重复从服务器端获取资源，也保证了服务器有变化是，客户端能够及时得到最新的资源。</p>
-<h4 id="2、Etag-If-None-Match"><a href="#2、Etag-If-None-Match" class="headerlink" title="2、Etag / If-None-Match"></a>2、Etag / If-None-Match</h4><p>​        当浏览器第一次请求一个url时，服务器端的返回状态码为200，同时HTTP响应头会有一个Etag，存放着服务器端生成的一个序列值。</p>
-<img src="/2019/10/30/浏览器缓存控制/a.jpg" title="This is an example image">
-
-<p>​    浏览器第二次请求上次请求过的url时，浏览器会在HTTP请求头添加一个If-None-Match的标记，用来询问服务器该文件有没有被修改。</p>
-<img src="/2019/10/30/浏览器缓存控制/b.jpg" title="This is an example image">
-
-
-
-<p>Etag 主要为了解决 Last-Modified 无法解决的一些问题:</p>
-<p>​    1、一些文件也许会周期性的更改，但是他的内容并不改变(仅仅改变的修改时间)，这个时候我们并不希望客户端认为这个文件被修改了，而重新GET;</p>
-<p>​    2、某些文件修改非常频繁，比如在秒以下的时间内进行修改，(比方说1s内修改了N次)，If-Modified-Since能检查到的粒度是s级的，这种修改无法判断(或者说UNIX记录MTIME只能精确到秒)</p>
-<p>​    3、某些服务器不能精确的得到文件的最后修改时间；</p>
-<p>使用 etag 的代价是增加了服务器的计算负担，特别是当文件比较大时。</p>
-<h4 id="3、-Cache-Control-max-age-秒-和-Expires"><a href="#3、-Cache-Control-max-age-秒-和-Expires" class="headerlink" title="3、 Cache-Control: max-age=秒 和 Expires"></a>3、 <strong>Cache-Control: max-age=秒 和 Expires</strong></h4><p>​    1、Expires = 时间，HTTP 1.0 版本，缓存的载止时间，允许客户端在这个时间之前不去检查（发请求）<br>​    2、max-age = 秒，HTTP 1.1版本，资源在本地缓存多少秒。</p>
-<p><strong>如果max-age和Expires同时存在，则被Cache-Control的max-age覆盖。</strong></p>
-<p>Expires 的一个缺点就是，返回的到期时间是服务器端的时间，这样存在一个问题，如果客户端的时间与服务器的时间相差很大，那么误差就很大，所以在HTTP 1.1版开始，使用Cache-Control: max-age=秒替代。</p>
-<p>参考：</p>
-<p>1、<a href="https://www.cnblogs.com/zhouwenhong/p/3928645.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhouwenhong/p/3928645.html</a></p>
-<p>2、<a href="https://www.cnblogs.com/fonyer/p/3953546.html" target="_blank" rel="noopener">https://www.cnblogs.com/fonyer/p/3953546.html</a></p>
+<p>第二种排序结果如下图</p>
+<img src="/2019/12/08/sortBy/sort2.png" title="This is an example image">
 
     </div>
   </div>
@@ -260,7 +239,7 @@
         
           本文作者 : zhouleil <br/>
         
-        原文链接 : <a href="">http://yoursite.com/2019/10/30/浏览器缓存控制/</a><br>
+        原文链接 : <a href="">http://yoursite.com/2019/12/08/sortBy/</a><br>
         版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
         </blockquote>
       </div>
@@ -306,15 +285,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/10/26/http状态/" target="_self">http状态码</a>
+        <a href="/2019/10/30/浏览器缓存控制/" target="_self">浏览器缓存 Expires 、Last-Modified、Etag</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/12/08/sortBy/" target="_self">sortBy</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
