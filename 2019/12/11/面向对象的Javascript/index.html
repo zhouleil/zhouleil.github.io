@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>面向对象的Javascript | zhouleil 的个人博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,设计模式,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">zhouleil</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a 
+              href="/"
+              target="_self"
+            >
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/前端/">
+          
+            <a 
+              href="/categories/前端/"
+              target="_self"
+            >
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a 
+              href="/categories/"
+              target="_self"
+            >
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a 
+              href="/about/"
+              target="_self"
+            >
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a 
+                    href="https://github.com/zhouleil" 
+                    target="_blank"
+                  >
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>面向对象的Javascript</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2019-12-11
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="一、鸭子模型"><a href="#一、鸭子模型" class="headerlink" title="一、鸭子模型"></a>一、鸭子模型</h2><p><strong>鸭子模型通俗说法：</strong>如果它走起路来像鸭子，叫起来也是鸭子，那么它就是鸭子。</p>
+<h3 id="代码模拟这个故事如下"><a href="#代码模拟这个故事如下" class="headerlink" title="代码模拟这个故事如下"></a>代码模拟这个故事如下</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> duck = &#123;</span><br><span class="line">    duckSinging: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'嘎嘎嘎'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> chicken = &#123;</span><br><span class="line">    duckSinging: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'嘎嘎嘎'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> choir = [] <span class="comment">// 合唱团</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> joinChoir = <span class="function"><span class="keyword">function</span> (<span class="params"> animal </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (animal &amp;&amp; <span class="keyword">typeof</span> animal.duckSinging === <span class="string">'function'</span>) &#123;</span><br><span class="line">        choir.push(animal);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'恭喜加入合唱团'</span>)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'合唱团已有成员数量:'</span> + choir.length)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">joinChoir(duck)</span><br><span class="line">joinChoir(chicken)</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、多态"><a href="#二、多态" class="headerlink" title="二、多态"></a>二、多态</h2><p><strong>多态：</strong>同一操作作用于不同多对象上面，可以产生不同的解释和不同的执行结果。换句话说，给不同的对象发送同一个消息的时候，这些对象会根据这个消息分别给出不同的反馈。</p>
+<h3 id="实现如下"><a href="#实现如下" class="headerlink" title="实现如下"></a>实现如下</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> makeSound = <span class="function"><span class="keyword">function</span> (<span class="params">animal</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Duck) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'嘎嘎嘎'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Chicken) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'咯咯咯'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> Duck = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> Chicken = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">makeSound(<span class="keyword">new</span> Duck()) <span class="comment">// 嘎嘎嘎</span></span><br><span class="line">makeSound(<span class="keyword">new</span> Chicken()) <span class="comment">// 咯咯咯</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*  </span></span><br><span class="line"><span class="comment">* 这段代码体现了多态性，当我们分别向鸭和鸡发出“叫唤”当消息时，它们根据此消息作出了各自不同当反应。但这样的</span></span><br><span class="line"><span class="comment">* “多态性”是无法令人满意的，如果后来又增加了一只动物，比如狗，显然狗的叫声是“汪汪汪”，此时我们必须得改动</span></span><br><span class="line"><span class="comment">* makeSound 函数，才能让狗也发出叫声。修改代码总是危险的，修改的地方越多，程序出错的可能性就越大，而且当</span></span><br><span class="line"><span class="comment">* 动物的种类越来越多时，makeSound 有可能变成一个巨大的函数。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>多态背后的思想是将“做什么”和“谁去做以及怎么去做”分离开来，也就是将“不变的事物”与“可能改变的事物”分离开来。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改后的代码</span></span><br><span class="line"><span class="keyword">var</span> makeSound = <span class="function"><span class="keyword">function</span> (<span class="params">animal</span>) </span>&#123;</span><br><span class="line">    animal.sound()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Duck = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">Duck.prototype.sound = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'嘎嘎嘎'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Chicken = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">Chicken.prototype.sound = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'咯咯咯'</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">makeSound(<span class="keyword">new</span> Duck())</span><br><span class="line">makeSound(<span class="keyword">new</span> Chicken())</span><br></pre></td></tr></table></figure>
+
+<p>假设我们要编写一个地图应用，现在有两家可选的地图API提供商供我们接入自己的应用。目前我们选择的是谷歌地图，谷歌地图的API中提供了 <strong>show</strong> 方法，负责在页面上展示整个地图。<br>示例代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> googleMap = &#123;</span><br><span class="line">    show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'开始渲染谷歌地图'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> renderMap = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    googleMap.show()</span><br><span class="line">&#125;</span><br><span class="line">renderMap()</span><br><span class="line"></span><br><span class="line"><span class="comment">/*  </span></span><br><span class="line"><span class="comment">* 后来，要把谷歌地图换成百度地图，为了让 renderMap 函数保持一定的弹性，我们用一些条件分支来让 renderMap 函* 数保持一定的弹性，我们用一些条件分支来让 renderMap 函数同时支持谷歌地图和百度地图</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> baiduMap =  &#123;</span><br><span class="line">    show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'开始渲染百度地图'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 重写 renderMap</span></span><br><span class="line"><span class="keyword">var</span> renderMap = <span class="function"><span class="keyword">function</span> (<span class="params">type</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (type === <span class="string">'google'</span>) &#123;</span><br><span class="line">        googleMap.show()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string">'baidu'</span>) &#123;</span><br><span class="line">        baiduMap.show()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">renderMap(<span class="string">'google'</span>)</span><br><span class="line">renderMap(<span class="string">'baidu'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，虽然 renderMap 函数目前保持了一定的弹性，但这种弹性是很脆弱的，一旦需要替换成搜搜地图，那无疑必须得改动 renderMap 函数，继续往里面堆砌条件分支语句。</p>
+<p><strong>我们还是先把程序中相同的部分抽象出来，那就是显示某个地图：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> renderMap = <span class="function"><span class="keyword">function</span> (<span class="params">map</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (map.show <span class="keyword">instanceof</span> <span class="built_in">Function</span>) &#123;</span><br><span class="line">        map.show()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">renderMap(googleMap) <span class="comment">// 开始渲染谷歌地图</span></span><br><span class="line">renderMap(baidu)    <span class="comment">// 开始渲染百度地图</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这样即使以后增加了搜搜地图， renderMap 函数仍染不需要做任何改变。</span></span><br><span class="line"><span class="keyword">var</span> sousouMap = &#123;</span><br><span class="line">    show: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'开始渲染搜搜地图'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">renderMap(sousouMap)</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、封装"><a href="#三、封装" class="headerlink" title="三、封装"></a>三、封装</h2><p><strong>封装：</strong> 封装的目的是将信息隐藏。一般而言，我们讨论的封装是封装数据和封装实现。但更广义的封装，不仅包括封装数据和封装实现，还包括封装类型和封装变化。</p>
+<h3 id="1-封装数据"><a href="#1-封装数据" class="headerlink" title="1.封装数据"></a>1.封装数据</h3><p>在许多语言的对象系统中，封装数据是由语法解析来实现的，这些语言也许提供了 private、public、protected 等关键字来提供不同等访问权限。<br>但Javascript并没有提供对这些关键字对支持，我们只能依赖变量对作用域来实现封装特性，而且只能模拟出 public 和 private 这两种封装性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过函数作用域来封装</span></span><br><span class="line"><span class="keyword">var</span> myObject = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _name = <span class="string">'sven'</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        getName: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> _name</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(myObject.getName()) <span class="comment">// sven</span></span><br><span class="line"><span class="built_in">console</span>.log(myObject._name) <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-封装实现"><a href="#2-封装实现" class="headerlink" title="2.封装实现"></a>2.封装实现</h3><p>从封装实现的细节来讲，封装使得对象内部的变化对其他对象而言是透明的，也就是不可见的。对象对它自己对行为负责。其他对象或者用户都不关心它都内部实现。封装使得对象之间的耦合变松散，对象之间只通过暴露的API接口来通信。当我们修改一个对象时，可以随意修改它当内部实现，只要对外当接口没有变化，就不会影响到程序的其他功能。</p>
+<p>例如： 数组的 map、 forEach 等方法</p>
+<h3 id="3-封装类型"><a href="#3-封装类型" class="headerlink" title="3.封装类型"></a>3.封装类型</h3><p>封装类型是静态类型语言中一种重要的封装方式。一般而言，封装类型是通过抽象类和接口来进行的。把对象的真正类型隐藏在抽象类或者接口之后，相比对象的类型，客户更关心对象的行为。<br>在Javascript中，并没有对抽象类和接口的支持。</p>
+<h3 id="4-封装变化"><a href="#4-封装变化" class="headerlink" title="4.封装变化"></a>4.封装变化</h3><p>通过封装变化的方式，把系统中稳定不变的部分和容易变化的部分隔离开来，在系统的演变过程中，我们只需要替换那些容易变化的部分，如果这些变化是已经封装好的，替换起来也相对容易。这可以最大程度地保证程序的稳定性和可拓展性。</p>
+<h2 id="四、原型模式和基于原型继承的Javascript对象系统"><a href="#四、原型模式和基于原型继承的Javascript对象系统" class="headerlink" title="四、原型模式和基于原型继承的Javascript对象系统"></a>四、原型模式和基于原型继承的Javascript对象系统</h2><h3 id="使用克隆的原型模式"><a href="#使用克隆的原型模式" class="headerlink" title="使用克隆的原型模式"></a>使用克隆的原型模式</h3><p>从设计模式的角度讲，原型模式是用于创建对象的一种模式，如果我们想要创建一个对象，一种方法是先指定它的类型，然后通过类来创建这个对象。原型模式选择了另外一种方式，我们不再关心对象的具体类型，而是找到一个对象，然后通过克隆来创建一个一模一样的对象。<br>ECMAScript5 提供了 Object.create 方法，可以用来克隆对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Plane = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.blood = <span class="number">100</span></span><br><span class="line">    <span class="keyword">this</span>.attackLevel = <span class="number">1</span></span><br><span class="line">    <span class="keyword">this</span>.defenseLevel = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> plane = <span class="keyword">new</span> Plane()</span><br><span class="line">plane.blood = <span class="number">300</span></span><br><span class="line">plane.attackLevel = <span class="number">10</span></span><br><span class="line">plane.defenseLevel = <span class="number">7</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clonePlane = <span class="built_in">Object</span>.create(plane)</span><br><span class="line"><span class="built_in">console</span>.log(clonePlane)</span><br></pre></td></tr></table></figure>
+
+<p>在不支持Object.crate方法的浏览器中，则可以使用以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.create = <span class="built_in">Object</span>.create || <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">    F.prototype = obj</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="原型编程范型至少包括以下基本原则、"><a href="#原型编程范型至少包括以下基本原则、" class="headerlink" title="原型编程范型至少包括以下基本原则、"></a>原型编程范型至少包括以下基本原则、</h3><ul>
+<li>所有的数据都是对象</li>
+<li>要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它</li>
+<li>对象会记住它的原型</li>
+<li>如果对象无法响应某个请求，它会把这个请求委托给它自己的原型</li>
+</ul>
+<h4 id="1、所有的数据都是对象"><a href="#1、所有的数据都是对象" class="headerlink" title="1、所有的数据都是对象"></a>1、所有的数据都是对象</h4><p><strong>事实上，Javascript中的根对象是 Object.prototype 对象。</strong></p>
+<h4 id="2、要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它"><a href="#2、要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它" class="headerlink" title="2、要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它"></a>2、要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;</span><br><span class="line">Person.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Person(<span class="string">'sven'</span>)</span><br><span class="line">a.name <span class="comment">// sven</span></span><br><span class="line">a.getName() <span class="comment">// sven</span></span><br><span class="line"><span class="built_in">Object</span>.getPrototypeOf(a) === Person.prototype <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里<code>Person</code>并不是类，而是函数构造器，Javascript 的函数既可以作为普通函数调用，也可以作为构造器被调用。当使用 <code>new</code> 运算符来调用函数时，此时的函数就是一个构造器。用 <code>new</code> 运算符来创建对象的过程，实际上也只是先克隆 <code>Object.prototype</code> 对象，再进行一些其他的额外操作的过程。<br>调用构造函数实际上会经历以下四个步骤：<br>（1）创建一个新对象；<br>（2）将构造函数的作用域赋给新对象（因此<code>this</code>就指向了新对象）；<br>（3）执行构造函数中的代码（为这个新对象添加属性）；<br>（4）返回新对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> objectFactory = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>(), <span class="comment">// 从 Object.prototype 上克隆一个空的对象</span></span><br><span class="line">    Constructor = [].shift.call(<span class="built_in">arguments</span>); <span class="comment">// 取得外部传人的构造器，此例是 Person</span></span><br><span class="line"></span><br><span class="line">    obj.__proto__ = Constructor.prototype; <span class="comment">// 指向正确的原型，而不是 Object.prototype</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ret = Constructor.apply(obj, <span class="built_in">arguments</span>); <span class="comment">// 借用外部传人的构造器给 obj 设置属性</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> ret === <span class="string">'object'</span> ? ret : obj; <span class="comment">// 确保构造器总是返回一个对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = objectFactory(Person, <span class="string">'sven'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a.name); <span class="comment">// sven</span></span><br><span class="line"><span class="built_in">console</span>.log(a.getName()); <span class="comment">// sven</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getPrototypeOf(a) === Person.prototype)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、对象会记住它的原型"><a href="#3、对象会记住它的原型" class="headerlink" title="3、对象会记住它的原型"></a>3、对象会记住它的原型</h4><p>如果请求可以在一个链条中依次往后传递，那么每个节点都必须知道它的下一个节点。同理，Javascript语言中的原型链查找机制，每个对象至少应该记住它自己的原型。<br>对于“对象把请求委托给它自己的原型”这句话，更好的说法是对象把请求委托给它的构造器的原型。<br>Javascript给对象提供一个名为<code>__proto__</code>的隐藏属性，某个对象的<code>__proto__</code>属性默认会指向它的构造器的原型对象，即<code>{Constructor}.prototype</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Object</span>()</span><br><span class="line"><span class="built_in">console</span>.log(a.__proto__ === <span class="built_in">Object</span>.prototype) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实际上，<code>__proto__</code>就是对象跟“对象构造器的原型”联系起来的纽带</strong></p>
+<h4 id="4、如果对象无法响应某个请求，它会把这个请求委托给它的构造器的原型"><a href="#4、如果对象无法响应某个请求，它会把这个请求委托给它的构造器的原型" class="headerlink" title="4、如果对象无法响应某个请求，它会把这个请求委托给它的构造器的原型"></a>4、如果对象无法响应某个请求，它会把这个请求委托给它的构造器的原型</h4><p>这条规则即是原型链继承的精髓所在。当一个对象无法响应某个请求的时候，它会顺着原型链把这个请求传递下去，直到遇到一个可以处理该请求的对象为止。</p>
+<p>下面的代码是我们最常用的原型链继承方式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">name</span>: <span class="string">'sven'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">A.prototype = obj</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> A()</span><br><span class="line"><span class="built_in">console</span>.log( a.name ) <span class="comment">// sven</span></span><br></pre></td></tr></table></figure>
+
+<p>我们来看看执行这段代码的时候，引擎做了哪些事情。</p>
+<ul>
+<li>首先，尝试遍历对象<code>a</code>中所有属性，但没有找到<code>name</code>这个属性。</li>
+<li>查找<code>name</code> 属性但这个请求被委托给对象<code>a</code>的构造器的原型，它被<code>a.__proto__</code>记录着并且指向<code>A.prototype</code>,而<code>A.prototype</code>被设置为对象<code>obj</code>。</li>
+<li>在对象<code>obj</code>中找到了<code>name</code>属性，并返回它的值。</li>
+</ul>
+<p>当我们期待得到一个“类”继承自另外一个“类”的效果时，往往会用下面的代码来模拟实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span> (<span class="params"></span>)  </span>&#123;&#125;</span><br><span class="line">A.prototype = &#123; <span class="attr">name</span>: <span class="string">'sven'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> B = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">B.prototype = <span class="keyword">new</span> A();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> B()</span><br><span class="line"><span class="built_in">console</span>.log(b.name) <span class="comment">// sven</span></span><br></pre></td></tr></table></figure>
+
+<p>再看看这段代码执行的时候，引擎做了什么事情：</p>
+<ul>
+<li>首先，尝试遍历对象<code>b</code>中所有的属性，但没有找到<code>name</code>这个属性。</li>
+<li>查找<code>name</code>属性的请求被委托给对象<code>b</code>的构造器的原型，它被 <code>b.__proto__</code>记录着并且指向<code>B.prototype</code>,而<code>B.prototype</code>被设置为一个通过<code>new A()</code>创建出来的对象。</li>
+<li>在该对象中依然没有找到<code>name</code>属性，于是请求被继续委托给这个对象构造器的原型<code>A.prototype</code>。</li>
+<li>在<code>A.prototype</code>中找到了<code>name</code>属性，并返回了它的值。</li>
+</ul>
+<p>和把<code>B.prototype</code>直接指向一个字面量对象相比，同过<code>B.prototype = new A()</code>形式的原型链比之前多了一层。但二者之间没有本质的区别，都是将对象构造器的原型指向另外一个对象，继承总是发生在对象和对象之间。</p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2019/12/11/面向对象的Javascript/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
+  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2019/12/08/markdown书写格式/" target="_self">markdown书写格式</a>
+      </div>
+    
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 7, 15).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
