@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="前端,">
+    <meta name="keywords" content="前端,js,">
   
 
   <script>
@@ -227,8 +227,8 @@
 <p>1、编译器会在当前作用域中声明（如果之前没有声明过）；</p>
 <p>2、在运行时引擎会在作用域中查找该变量，如果找到就会对它赋值。</p>
 <p>作用域是一套规则，用于确定在何处以及如何查找变量（标识符）。</p>
-<p><strong><em>如果查找的目的是对变量进行赋值，那么就会使用 LHS 查询；</em></strong></p>
-<p><strong><em>如果查找的目的是获取变量的值，就会使用RHS查询。</em></strong></p>
+<p><strong>如果查找的目的是对变量进行赋值，那么就会使用 LHS 查询；</strong></p>
+<p><strong>如果查找的目的是获取变量的值，就会使用RHS查询。</strong></p>
 <p>赋值操作赋会导致 LHS 查询。 = 操作赋或调用函数时传人的参数都会导致关联作用域的赋值操作。</p>
 <p>不成功的 RHS 引用会导致抛出 ReferenceError 异常。不成功的 LHS 引用会导致自动隐式 地创建一个全局变量(非严格模式下)，该变量使用 LHS 引用的目标作为标识符，或者抛 出 ReferenceError 异常(严格模式下)。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(c);</span><br><span class="line"><span class="comment">// =&gt; ReferenceError: c is not defined ; 不成功的 RHS </span></span><br><span class="line">b = <span class="number">1</span>;  </span><br><span class="line"><span class="comment">// =&gt; 不成功 LHS创建了一个全局变量</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span>;</span><br><span class="line">   b = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">hello();</span><br><span class="line"><span class="comment">//  ReferenceError: b is not defined; 严格模式下， LHS 失败抛出异常</span></span><br></pre></td></tr></table></figure>
@@ -305,7 +305,7 @@
     
       <div class="nav-next">
         下一篇:
-        <a href="/2019/09/13/this和原型/" target="_self">this绑定规则</a>
+        <a href="/2019/09/13/this绑定规则/" target="_self">this绑定规则</a>
         <i class="iconfont icon-next"></i>
       </div>
     
