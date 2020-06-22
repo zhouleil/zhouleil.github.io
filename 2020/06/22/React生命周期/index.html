@@ -8,12 +8,12 @@
   
   
   
-  <title>归档: 2019/9 | zhouleil 的个人博客</title>
+  <title>React生命周期 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="前端,React,">
   
 
   <script>
@@ -184,59 +184,182 @@
   })
 </script>
 
-      <div class="container">
-  <div class="timeline">
-  <span class="archive-move-on"></span>
-  <span class="archive-page-counter">
-    
-      <span>Wow! 一共有 31 篇文章</span>
-    
-  </span>
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
   
+
+<div class="post">
+  <h1 class="article-title">
+    <span>React生命周期</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-06-22
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
   
-    <div class="collection-title">
-      <h2>
-        <span>2019</span>
-      </h2>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="React-生命周期15、16-对比"><a href="#React-生命周期15、16-对比" class="headerlink" title="React 生命周期15、16 对比"></a>React 生命周期15、16 对比</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>15</th>
+<th>16</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>constructor</td>
+<td>constructor</td>
+</tr>
+<tr>
+<td>挂载阶段</td>
+<td>componentWillMount</td>
+<td>static getDerivedStateFromProps</td>
+</tr>
+<tr>
+<td></td>
+<td>render</td>
+<td>render</td>
+</tr>
+<tr>
+<td></td>
+<td>componentDIdMount</td>
+<td>componentDidMount</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>componentWillReceiveProps</td>
+<td>static getDerivedStateFromProps</td>
+</tr>
+<tr>
+<td></td>
+<td>shouldComponentUpdate</td>
+<td>shouldComponentUpdate</td>
+</tr>
+<tr>
+<td>更新阶段</td>
+<td>componentWillUpdate</td>
+<td>render</td>
+</tr>
+<tr>
+<td></td>
+<td>render</td>
+<td>getSnapshotBeforeUpdate</td>
+</tr>
+<tr>
+<td></td>
+<td>componentDidUpdate</td>
+<td>componentDidUpdate</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>卸载阶段</td>
+<td>componentWillUnMount</td>
+<td>componentWillUnMount</td>
+</tr>
+</tbody></table>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p><a href="https://zhuanlan.zhihu.com/p/36062486" target="_blank" rel="noopener">React v16.3 版本新生命周期函数浅析及升级方案</a></p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/06/22/React生命周期/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
     </div>
   
   
   
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/08/函数式编程1/">
-          <span>函数式编程1 - 函数式编程简介</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-08
-      </div>
-    </header>
-  </article>
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
   
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2019/09/01/babel简介/">
-          <span>babel简介</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        09-01
-      </div>
-    </header>
-  </article>
-  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
 </div>
-  <nav class="page-navigation">
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
     
-      <a href="/archives/2019/09/">上一页</a>
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/06/15/数据类型转换/" target="_self">数据类型转换</a>
+      </div>
     
     
   </nav>
+
+   
+
+   
+
 </div>
+
 
       <footer>
   <p class="site-info">
