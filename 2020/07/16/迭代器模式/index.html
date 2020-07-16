@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>迭代器模式 | zhouleil 的个人博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,设计模式,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">zhouleil</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a 
+              href="/"
+              target="_self"
+            >
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/前端/">
+          
+            <a 
+              href="/categories/前端/"
+              target="_self"
+            >
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a 
+              href="/categories/"
+              target="_self"
+            >
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a 
+              href="/about/"
+              target="_self"
+            >
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a 
+                    href="https://github.com/zhouleil" 
+                    target="_blank"
+                  >
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>迭代器模式</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-07-16
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p>迭代器模式是指提供一种方法顺序访问一个聚合对象中的各个元素，而又不需要暴露该对象的内部表示。<br>迭代器模式可以把迭代的过程从业务逻辑中分离出来，在使用迭代器模式之后，即使不关心对象的内部构造，也可以按顺序访问其中的每个元素。</p>
+<p>目前，恐怕只有在一些“古董级”的语言中才会为实现一个迭代器模式而烦恼，现在流行的 大部分语言如 Java、Ruby 等都已经有了内置的迭代器实现，许多浏览器也支持 JavaScript 的 10 Array.prototype.forEach。</p>
+<h2 id="1、实现自己的迭代器"><a href="#1、实现自己的迭代器" class="headerlink" title="1、实现自己的迭代器"></a>1、实现自己的迭代器</h2><p>实现 <code>each</code> 函数， <code>each</code> 函数接受2个参数，第一个为被循环的数组，第二个为循环中每一步后将被触发的回调函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> each = <span class="function"><span class="keyword">function</span> (<span class="params">arr, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = arr.length; i &lt; l; i++)  &#123;</span><br><span class="line">    callback.call(arr[i], i, arr[i])</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">each([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function"><span class="keyword">function</span> (<span class="params">i, n</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(i, n)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、内部迭代器和外部迭代器"><a href="#2、内部迭代器和外部迭代器" class="headerlink" title="2、内部迭代器和外部迭代器"></a>2、内部迭代器和外部迭代器</h2><h3 id="1、内部迭代器"><a href="#1、内部迭代器" class="headerlink" title="1、内部迭代器"></a>1、内部迭代器</h3><p>内部迭代器的内部已经定义好了迭代规则，它完全接手整个迭代过程，外部只需要一次初始调用。</p>
+<p>内部迭代器在调用的时候非常方便，外界不用关心迭代器内部的实现，跟迭代器的交互也仅仅是一次初始调用，但这也刚好是内<br>部迭代器的缺点。</p>
+<p>比如现在有个需求，要判断2个数组里元素的值是否完全相等，如果不改写 <code>each</code> 函数本身的代码，我们能够入手的地方似乎<br>只剩下 <code>each</code> 的回调函数了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> compare = <span class="function"><span class="keyword">function</span> (<span class="params">arr1, arr2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (arr1.length !== arr2.length) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'arr1 和 arr2 不相等'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  each(arr1, <span class="function"><span class="keyword">function</span> (<span class="params">i, n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n !== arr2[i]) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'arr1 和 arr2 不相等'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'arr1 和 arr2 相等'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">compare([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、外部迭代器"><a href="#2、外部迭代器" class="headerlink" title="2、外部迭代器"></a>2、外部迭代器</h3><p>外部迭代器必须显示地请求迭代下一个元素。</p>
+<p>外部跌代器增加了一些调用的复杂度，但相对也增强了跌代器的灵活性，我们可以手工控制迭代的过程或者顺序。</p>
+<p>下面这个外部迭代器的实现来自《松本行弘的程序世界》第 4 章，原例用 Ruby 写成，这里我们翻译成 Javascript</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> Iterator =  <span class="function">(<span class="params">obj</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> current = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> next = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    current += <span class="number">1</span>;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> isDone = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> current &gt;= obj.length;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> getCurrItem = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> obj[current];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    next,</span><br><span class="line">    isDone,</span><br><span class="line">    getCurrItem</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 再看看如何改写 `compare` 函数：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> compare = <span class="function">(<span class="params">iterator1, iterator2</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">while</span>( !iterator1.isDone() &amp;&amp; !iterator2.isDone() ) &#123;</span><br><span class="line">    <span class="keyword">if</span> (iterator1.getCurrItem() !== iterator2.getCurrItem() ) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">' iterator1 和 iterator2 不相等'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    iterator1.next();</span><br><span class="line">    iterator2.next();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'iterator1 和 iterator2 相等'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> iterator1 = Iterator([<span class="number">1</span> ,<span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="keyword">var</span> iterator2 = Iterator([<span class="number">1</span> ,<span class="number">2</span>, <span class="number">3</span>]);</span><br><span class="line"></span><br><span class="line">compare(iterator1, iterator2);</span><br></pre></td></tr></table></figure>
+
+<p>外部迭代器虽然调用方式相对复杂，但它的适用面更广，也能满足更多变的需求。内部迭代器和外部迭代器在实际生产中没有<br>优劣之分，究竟使用哪个要根据需求场景而定。</p>
+<h2 id="3、迭代类数组对象和字面量对象"><a href="#3、迭代类数组对象和字面量对象" class="headerlink" title="3、迭代类数组对象和字面量对象"></a>3、迭代类数组对象和字面量对象</h2><p>迭代器模式不仅可以迭代数组，还可以迭代一些类数组的对象。比如 <code>arguments</code>、<code>{ &quot;0&quot;: &#39;a&#39;, &quot;1&quot;: &#39;b&#39; }</code> 等。<br>通过上面的代码可以观察到，无论是内部迭代器还是外部跌代器，只要被迭代的聚合对象拥有 <code>length</code> 属性而且可以用下<br>标访问，那它就可以被迭代。</p>
+<p>在 <code>Javascript</code> 中， <code>for in</code> 语句可以用来迭代普通字面量对象的属性。<code>for of</code> 语句在可迭代对象（包括 Array，Map，Set，String，TypedArray，arguments 对象等等）上创建一个迭代循环。</p>
+<p>jQuery 中提供了 <code>$.each</code> 函数来封装各种迭代行为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$.each = <span class="function"><span class="keyword">function</span> (<span class="params">obj, callback, args</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> value,</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      length = obj.length,</span><br><span class="line">      isArray = isArraylike(obj);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (args) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isArray) &#123; <span class="comment">// 迭代数组、类数组</span></span><br><span class="line">      <span class="keyword">for</span> (; i &lt; length; i++) &#123;</span><br><span class="line">        value = callback.apply(obj[i], args);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( value === <span class="literal">false</span> ) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (i <span class="keyword">in</span> obj) &#123; <span class="comment">// 迭代对象</span></span><br><span class="line">        value = callback.apply(obj[i], args);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (value === <span class="literal">false</span>) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ( isArray ) &#123;</span><br><span class="line">      <span class="keyword">for</span> ( ; i &lt; length; i++ ) &#123;</span><br><span class="line">        value = callback.call( obj[ i ], i, obj[ i ] );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( value === <span class="literal">false</span> ) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> ( i <span class="keyword">in</span> obj ) &#123;</span><br><span class="line">        value = callback.call( obj[ i ], i, obj[ i ] );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( value === <span class="literal">false</span> ) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用 <code>for of</code> 拉平数组:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>]]]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> flat = <span class="function">(<span class="params">(</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> newArr = [];</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">addValue</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'object'</span>) &#123;</span><br><span class="line">        addValue(value);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        newArr.push(value);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> newArr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> newArr = flat(arr);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(newArr);</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、倒序迭代器"><a href="#4、倒序迭代器" class="headerlink" title="4、倒序迭代器"></a>4、倒序迭代器</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> reverseEach = <span class="function"><span class="keyword">function</span> (<span class="params">ary, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> l = ary.length - <span class="number">1</span>; l &gt;= <span class="number">0</span>; l--) &#123;</span><br><span class="line">    callback(l, ary[l]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reverseEach([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], <span class="function"><span class="keyword">function</span> (<span class="params">i, n</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(n); <span class="comment">// 2, 1, 0</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5、中止迭代器"><a href="#5、中止迭代器" class="headerlink" title="5、中止迭代器"></a>5、中止迭代器</h2><p>迭代器可以像普通 <code>for</code> 循环中的 <code>break</code> 一样，提供一种跳出循环的方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> each = <span class="function"><span class="keyword">function</span> (<span class="params">arr, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = arr.length; i &lt; l; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> result = callback(i, arr[i]);</span><br><span class="line">    <span class="keyword">if</span> (result === <span class="literal">false</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">each([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], <span class="function"><span class="keyword">function</span> (<span class="params">i, n</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (n &gt; <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(n); <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="6、迭代器的应用举例"><a href="#6、迭代器的应用举例" class="headerlink" title="6、迭代器的应用举例"></a>6、迭代器的应用举例</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 上传模块</span></span><br><span class="line"><span class="keyword">var</span> getUploadObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="string">"TXFTNActiveX.FTNUpload"</span>); <span class="comment">// IE 上传控件</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="keyword">if</span> (supportFlash()) &#123; <span class="comment">// supportFlash 函数未提供</span></span><br><span class="line">      <span class="keyword">var</span> str = <span class="string">'&lt;object type="application/x-shockwave-flase"&gt;&lt;/object&gt;'</span>;</span><br><span class="line">      <span class="keyword">return</span> $(str).appendTo($(<span class="string">'body'</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">var</span> str = <span class="string">'&lt;input name="file" type="file" /&gt;'</span>; <span class="comment">// 表单上传</span></span><br><span class="line">      <span class="keyword">return</span> $(str).append($(<span class="string">'body'</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用迭代器模式重构如下</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getActiveUploadObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="string">"TXFTNActiveX.FTNUpload"</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getFlashUploadObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (supportFlash()) &#123;</span><br><span class="line">    <span class="keyword">var</span> str = <span class="string">'&lt;object type="application/x-shockwave-flash"&gt;&lt;/object&gt;'</span>;</span><br><span class="line">    <span class="keyword">return</span> $(str).appendTo($(<span class="string">'body'</span>));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getFormUploadObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> str = <span class="string">'&lt;input name="file" type="file" class="ui-file" /&gt;'</span>;</span><br><span class="line">  <span class="keyword">return</span> $(str).appendTo($(<span class="string">'body'</span>));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在 getActiveUploadObj、getFlashUploadObj、getFormUpladObj 这 3 个函数中都有同一个约定: 如果该函数里面的 *  upload 对象是可用的，则让函数返回该对象，反之返回 false，提示迭代器继 续往后面进行迭代。</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> iteratorUploadObj = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, fn; fn = <span class="built_in">arguments</span>[i++];) &#123;</span><br><span class="line">    <span class="keyword">var</span> uploadObj = fn();</span><br><span class="line">    <span class="keyword">if</span> (uploadObj !== <span class="literal">false</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> uploadObj;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> uploadObj = iteratorUploadObj( getActiveUploadObj, getFlashUploadObj, getFormUpladObj );</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 重构代码之后，我们可以看到，获取不同上传对象的方法被隔离在各自的函数里互不干扰， try、catch 和 if 分支不再纠缠在一*  起，使得我们可以很方便地的维护和扩展代码。</span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></table></figure>
+
+<p>迭代器模式是一种相对简单的模式，简单到很多时候我们都不认为它是一种设计模式。目前的绝大部分语言都内置了迭代器。</p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/07/16/迭代器模式/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
+  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/07/13/防抖与节流/" target="_self">防抖与节流</a>
+      </div>
+    
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 7, 15).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>

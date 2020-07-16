@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>防抖与节流 | zhouleil 的个人博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,其他,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">zhouleil</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a 
+              href="/"
+              target="_self"
+            >
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/前端/">
+          
+            <a 
+              href="/categories/前端/"
+              target="_self"
+            >
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a 
+              href="/categories/"
+              target="_self"
+            >
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a 
+              href="/about/"
+              target="_self"
+            >
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a 
+                    href="https://github.com/zhouleil" 
+                    target="_blank"
+                  >
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>防抖与节流</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-07-13
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1、防抖"><a href="#1、防抖" class="headerlink" title="1、防抖"></a>1、防抖</h2><p>防抖：触发高频事件后 <code>n</code> 秒内函数只会执行一次，如果 <code>n</code> 秒内高频事件再次被触发，则重新计算时间。</p>
+<p>实现思路：每次触发事件时都取消之前的延时调用方式。</p>
+<p>代码实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      clearTimeout(timer);</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = setTimeout(fn.bind(<span class="keyword">this</span>, ...rest), delay);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> createDiv = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span></span><br><span class="line">      div.innerHTML = text;</span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.appendChild(div);</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++) &#123;</span></span><br><span class="line"><span class="javascript">      createDiv(<span class="string">"我的第"</span> + i + <span class="string">"个div"</span>)</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> debounce = <span class="function"><span class="keyword">function</span> (<span class="params">fn, wait</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> timer = <span class="literal">null</span>;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">if</span> (timer) &#123;</span></span><br><span class="line">          clearTimeout(timer);</span><br><span class="line"><span class="javascript">          timer = <span class="literal">null</span>;</span></span><br><span class="line">        &#125;</span><br><span class="line"><span class="javascript">        timer = setTimeout(fn.bind(<span class="keyword">this</span>, ...rest), wait);</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(e)</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, debounce(handle, <span class="number">200</span>));</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、节流"><a href="#2、节流" class="headerlink" title="2、节流"></a>2、节流</h2><p>节流: 高频事件触发，但在n秒内只会执行一次，所以节流会稀释函数的执行频率</p>
+<p>实现思路: 每次触发事件时都判断当前是否有等待执行的延时函数 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节流，定时器方式</span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; fn </span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; delay </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> throttle = <span class="function"><span class="keyword">function</span> (<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      clearTimeout(timer);</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">      fn.apply(<span class="keyword">this</span>, rest);</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节流，时间戳方式</span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; fn </span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; delay </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> throttle = <span class="function"><span class="keyword">function</span> (<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> prev = <span class="built_in">Date</span>.now();</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> curr = <span class="built_in">Date</span>.now();</span><br><span class="line">    <span class="keyword">if</span> (delay - (curr - prev) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">      fn.apply(<span class="keyword">this</span>, rest);</span><br><span class="line">      prev = <span class="built_in">Date</span>.now();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 节流， 定时器和时间戳组合方式</span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; fn </span></span><br><span class="line"><span class="comment"> * @param &#123;*&#125; delay </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> throttle = <span class="function"><span class="keyword">function</span> (<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">var</span> startTime = <span class="built_in">Date</span>.now();</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> currTime = <span class="built_in">Date</span>.now();</span><br><span class="line">    <span class="keyword">var</span> remaining = delay - (currTime - startTime);</span><br><span class="line">    clearTimeout(timer);</span><br><span class="line">    <span class="keyword">if</span> (remaining &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">      fn.apply(<span class="keyword">this</span>, rest);</span><br><span class="line">      startTime = <span class="built_in">Date</span>.now();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        fn.apply(<span class="keyword">this</span>, rest);</span><br><span class="line">        startTime = <span class="built_in">Date</span>.now();</span><br><span class="line">      &#125;, remaining);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> createDiv = <span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span></span><br><span class="line">      div.innerHTML = text;</span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.appendChild(div);</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++) &#123;</span></span><br><span class="line"><span class="javascript">      createDiv(<span class="string">"我的第"</span> + i + <span class="string">"个div"</span>)</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> throttle = <span class="function"><span class="keyword">function</span> (<span class="params">fn, delay</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> timer = <span class="literal">null</span>;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">var</span> startTime = <span class="built_in">Date</span>.now();</span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> currTime = <span class="built_in">Date</span>.now();</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> remaining = delay - (currTime - startTime);</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(remaining)</span></span><br><span class="line">        clearTimeout(timer);</span><br><span class="line"><span class="javascript">        <span class="keyword">if</span> (remaining &lt;= <span class="number">0</span>) &#123;</span></span><br><span class="line"><span class="javascript">          fn.apply(<span class="keyword">this</span>, rest);</span></span><br><span class="line"><span class="javascript">          startTime = <span class="built_in">Date</span>.now();</span></span><br><span class="line"><span class="javascript">        &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="javascript">          timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            fn.apply(<span class="keyword">this</span>, rest);</span></span><br><span class="line"><span class="javascript">            startTime = <span class="built_in">Date</span>.now();</span></span><br><span class="line">          &#125;, remaining);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> handle = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(e)</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="built_in">window</span>.addEventListener(<span class="string">'scroll'</span>, throttle(handle, <span class="number">1000</span>));</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>防抖和节流的区别：防抖是将多次执行变为最后一次执行，节流是将多次执行变为每隔一段时间执行</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/youma/p/10559331.html" target="_blank" rel="noopener">深入理解JS防抖与节流</a></li>
+<li><a href="https://blog.csdn.net/m0_37972557/article/details/86533222" target="_blank" rel="noopener">防抖与节流</a></li>
+</ul>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/07/13/防抖与节流/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
+  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/07/08/代理模式/" target="_self">代理模式</a>
+      </div>
+    
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/2020/07/16/迭代器模式/" target="_self">迭代器模式</a>
+        <i class="iconfont icon-next"></i>
+      </div>
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 7, 15).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
