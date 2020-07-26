@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  <meta name="author" content="董沅鑫, yuanxin.me@gmail.com">
+  
+  
+  
+  <title>命令模式.md | zhouleil 的个人博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="前端,设计模式,">
+  
+
+  <script>
+    console.log('\n%c Hexo-theme-bmw v4.0 ' + '%c 🎉 https://github.com/dongyuanxin/theme-bmw 🎉\n' + '\n%c View demo online ' + '%c 🔍 https://godbmw.com/ 🔍  \n' , 'color: #fadfa3; background: #030307; padding:3px 0;', '', 'color: #fadfa3; background: #030307; padding:3px 0;', '');
+  </script>
+
+  
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/icon/iconfont.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+
+  <script src="/js/util.js"></script>
+<script src="/js/valine.min.js"></script>
+
+  
+
+  
+    <link href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js" async></script>
+  
+
+  
+    <link href="https://cdn.bootcss.com/social-share.js/1.0.16/css/share.min.css" rel="stylesheet">
+  
+  
+  <script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js" async></script>
+  
+  
+
+</head>
+
+  <body>
+
+    
+
+    <div id="app">
+
+      <div class="header-wrap">
+  <header>
+    <div class="site-brand">
+      <div class="site-title">
+        <a href="/">zhouleil</a>
+      </div>
+    </div>
+    <nav class="site-navigation">
+      <ul class="nav-menu">
+      
+        <li class="nav-item" data-path="/">
+          
+            <a 
+              href="/"
+              target="_self"
+            >
+              主页
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/前端/">
+          
+            <a 
+              href="/categories/前端/"
+              target="_self"
+            >
+              大前端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/后端">
+          
+            <a 
+              href="/categories/后端"
+              target="_self"
+            >
+              后端
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          
+            <a 
+              href="/categories/"
+              target="_self"
+            >
+              分类
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          
+            <a 
+              href="/about/"
+              target="_self"
+            >
+              关于
+            </a>
+          
+        </li>
+      
+        <li class="nav-item" data-path="">
+          
+            <a href="javascript:void(0);" v-else>抓到我</a>
+            <ul class="nav-menu--dropdown">
+              
+                <li>
+                  <a 
+                    href="https://github.com/zhouleil" 
+                    target="_blank"
+                  >
+                    Github
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+      </ul>
+    </nav>
+    <i class="iconfont icon-menu"></i>
+  </header>
+</div>
+
+<script>
+  let links = document.querySelectorAll('.nav-item');
+  for(let link of links){
+    let childrenLink = link.querySelector('ul');
+    link.addEventListener('mouseenter', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown active";
+      }
+    })
+    link.addEventListener('mouseleave', () => {
+      if(childrenLink) {
+        childrenLink.className = "nav-menu--dropdown";
+      }
+    })
+  }
+  let rootRealPath = getRealPath(window.location.pathname, true);
+  for(let link of links) {
+    let linkPath = link.getAttribute("data-path");
+    if(linkPath && getRealPath(linkPath, true) === rootRealPath) {
+      link.className = "nav-item hover";
+    }
+  }
+
+  let iconMenu = document.querySelector("i.iconfont.icon-menu"),
+    iconMenuClicked = false;
+  let navDOM = document.querySelector("nav.site-navigation");
+  iconMenu.addEventListener("click", () => {
+    iconMenuClicked 
+      ? navDOM.className = "site-navigation active"
+      : navDOM.className = "site-navigation";
+    iconMenuClicked = !iconMenuClicked;
+  })
+</script>
+
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
+  
+
+<div class="post">
+  <h1 class="article-title">
+    <span>命令模式.md</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-07-27
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
+  
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p>假设有一个快餐店，而我是该餐厅的点餐服务员，那么我一天的工作应该是这样的:当某位 5 客人点餐或者打来订餐电话后，我会把他的需求都写在清单上，然后交给厨房，客人不用关心是<br>哪些厨师帮他炒菜。我们餐厅还可以满足客人需要的定时服务，比如客人可能当前正在回家的路 上，要求 1 个小时后才开始炒他的菜，只要订单还在，厨师就不会忘记。客人也可以很方便地打 电话来撤销订单。另外如果有太多的客人点餐，厨房可以按照订单的顺序排队炒菜。</p>
+<p>这些记录着订餐信息的清单，便是命令模式中的命令对象。</p>
+<h2 id="1、命令模式的用途"><a href="#1、命令模式的用途" class="headerlink" title="1、命令模式的用途"></a>1、命令模式的用途</h2><p>命令模式是最简单和优雅的模式之一，命令模式中的命令(command)指的是一个执行某些特定事情的指令。</p>
+<p>命令模式最常见的应用场景是:有时候需要向某些对象发送请求，但是并不知道请求的接收 者是谁，也不知道被请求的操作是什么。此<br>时希望用一种松耦合的方式来设计程序，使得请求发送者和请求接收者能够消除彼此之间的耦合关系。</p>
+<p>拿订餐来说，客人需要向厨师发送请求，但是完全不知道这些厨师的名字和联系方式，也不 知道厨师炒菜的方式和步骤。 命令模式把客人订餐的请求封装成 command 对象，也就是订餐中的 订单对象。这个对象可以在程序中被四处传递，就像订单可以从服务员手中传到厨师的手中。这 样一来，客人不需要知道厨师的名字，从而解开了请求调用者和请求接收者之间的耦合关系。</p>
+<p>另外，相对于过程化的请求调用，command 对象拥有更长的生命周期。对象的生命周期是跟初始请求无关的，因为这个请求已经被封装在了 command 对象的方法中，成为了这个对象的行为。 我们可以在程序运行的任意时刻去调用这个方法，就像厨师可以在客人预定 1 个小时之后才帮他 炒菜，相当于程序在 1 个小时之后才开始执行 command 对象的方法。</p>
+<p>除了这两点之外，命令模式还支持撤销、排队等操作。</p>
+<h2 id="2、命令模式的例子——菜单程序"><a href="#2、命令模式的例子——菜单程序" class="headerlink" title="2、命令模式的例子——菜单程序"></a>2、命令模式的例子——菜单程序</h2><p>假设我们正在编写一个用户界面程序，该用户界面上至少有数十个 Button 按钮。因为项目 比较复杂，所以我们决定让某个程序员负责绘制这些按钮，而另外一些程序员则负责编写点击按 钮后的具体行为，这些行为都将被封装在对象里。</p>
+<p>在大型项目开发中，这是很正常的分工。对于绘制按钮的程序员来说，他完全不知道某个按 钮未来将用来做什么，可能用来刷新菜单界面，也可能用来增加一些子菜单，他只知道点击这个 按钮会发生某些事情。那么当完成这个按钮的绘制之后，应该如何给它绑定 onclick 事件呢?</p>
+<p>回想一下命令模式的应用场景:</p>
+<blockquote>
+<p>有时候需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请 求的操作是什么，此时希望用一种松耦合的方式来设计软件，使得请求发送者和请求接 收者能够消除彼此之间的耦合关系。</p>
+</blockquote>
+<p>我们很快可以找到在这里运用命令模式的理由:点击了按钮之后，必须向某些负责具体行为 的对象发送请求，这些对象就是请求的接收者。但是目前并不知道接收者是什么对象，也不知道 接收者究竟会做什么。此时我们需要借助命令对象的帮助，以便解开按钮和负责具体行为对象之 间的耦合。</p>
+<p><strong>设计模式的主题总是把不变的事物和变化的事物分离开来，命令模式也不例外。</strong></p>
+<p>按下按钮之 后会发生一些事情是不变的，而具体会发生什么事情是可变的。通过 command 对象的帮助，将来 我们可以轻易地改变这种关联，因此也可以在将来再次改变按钮的行为。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"button1"</span>&gt;</span>点击按钮 1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"button2"</span>&gt;</span>点击按钮 2<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"button3"</span>&gt;</span>点击按钮 3<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> button1 = <span class="built_in">document</span>.getElementById( <span class="string">'button1'</span> ),</span></span><br><span class="line"><span class="javascript">    button2 = <span class="built_in">document</span>.getElementById( <span class="string">'button2'</span> ),</span></span><br><span class="line"><span class="javascript">    button3 = <span class="built_in">document</span>.getElementById( <span class="string">'button3'</span> );</span></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 接下来定义 setCommand 函数，setCommand 函数负责往按钮上面安装命令。</span><br><span class="line"> * 可以肯定的是，点击按钮会执行某个 command 命令，执行命令的动作被约定为调用 command 对象的 execute()方法。</span><br><span class="line"> * 虽然还不知道这些命令究竟代表什么操作，但负责绘制按钮的程序员不关心这些事情，他只需要预留好安装命令的接口，command 对象自然知道如何和正确的对象沟通:</span><br><span class="line">**/</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> setCommand = <span class="function"><span class="keyword">function</span> (<span class="params">button, comand</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  button.onClick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line">    command.execute();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="comment">// 最后，负责编写点击按钮之后的具体行为的程序员总算交上了他们的成果，他们完成了刷新 菜单界面、增加子菜单和删除子菜单这几个功能，这几个功能被分布在 MenuBar 和 SubMenu 这两 个对象中:</span></span></span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> MenuBar =  &#123;</span></span><br><span class="line"><span class="javascript">  refresh: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">'刷新菜单目录'</span>);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> SubMenu =  &#123;</span></span><br><span class="line"><span class="javascript">  add: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>,log(<span class="string">'增加子菜单'</span>);</span></span><br><span class="line">  &#125;,</span><br><span class="line"><span class="javascript">  del: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">'删除子菜单'</span>);</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="comment">// 在让 button 变得有用起来之前，我们要先把这些行为都封装在命令类中:</span></span></span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> RefreshMenuBarCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver = receiver;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">RefreshMenuCommand.prototype.excute = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver.refresh();</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> AddSubMenuCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver = receiver;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">AddSubMenuCommand.prototype.excute = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver.add();</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> DelSubMenuCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver = receiver;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">DelSubMenuCommand.prototype.excute = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">this</span>.receiver.del();</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript"><span class="comment">// 最后就是把命令接收者传入到 command 对象中，并且把 command 对象安装到 button 上面:</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> refreshMenuBarCommand = <span class="keyword">new</span> RefreshMenuBarCommand( MenuBar );</span></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> addSubMenuCommand = <span class="keyword">new</span> AddSubMenuCommand( SubMenu );</span></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> delSubMenuCommand = <span class="keyword">new</span> DelSubMenuCommand( SubMenu );</span></span><br><span class="line"></span><br><span class="line">setCommand( button1, refreshMenuBarCommand );</span><br><span class="line">setCommand( button2, addSubMenuCommand );</span><br><span class="line">setCommand( button3, delSubMenuCommand );</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上只是一个很简单的命令模式示例，但从中可以看到我们是如何把请求发送者和请求接收 者解耦开的。</p>
+<h2 id="3、JavaScript-中的命令模式"><a href="#3、JavaScript-中的命令模式" class="headerlink" title="3、JavaScript 中的命令模式"></a>3、JavaScript 中的命令模式</h2><p>也许我们会感到很奇怪，所谓的命令模式，看起来就是给对象的某个方法取了 execute 的名 字。引入 command 对象和 receiver 这两个无中生有的角色无非是把简单的事情复杂化了，即使不 用什么模式，用下面寥寥几行代码就可以实现相同的功能:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> bindClick = <span class="function"><span class="keyword">function</span>(<span class="params"> button, func </span>)</span>&#123;</span><br><span class="line">  button.onclick = func;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MenuBar =  &#123;</span><br><span class="line">  refresh: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'刷新菜单目录'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> SubMenu =  &#123;</span><br><span class="line">  add: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>,log(<span class="string">'增加子菜单'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  del: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'删除子菜单'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">bindClick( button1, MenuBar.refresh );</span><br><span class="line">bindClick( button2, SubMenu.add );</span><br><span class="line">bindClick( button3, SubMenu.del );</span><br></pre></td></tr></table></figure>
+
+<p>这种说法是正确的，9.2 节中的示例代码是模拟传统面向对象语言的命令模式实现。命令模 式将过程式的请求调用封装在 command 对象的 execute 方法里，通过封装方法调用，我们可以把 运算块包装成形。command 对象可以被四处传递，所以在调用命令的时候，客户(Client)不需要关心事情是如何进行的。</p>
+<p><strong>命令模式的由来，其实是回调(callback)函数的一个面向对象的替代品。</strong></p>
+<p>JavaScript 作为将函数作为一等对象的语言，跟策略模式一样，命令模式也早已融入到了 JavaScript 语言之中。运算块不一定要封装在 command.execute 方法中，也可以封装在普通函数中。 函数作为一等对象，本身就可以被四处传递。即使我们依然需要请求“接收者”，那也未必使用 面向对象的方式，闭包可以完成同样的功能。</p>
+<p>在面向对象设计中，命令模式的接收者被当成 command 对象的属性保存起来，同时约定执行 命令的操作调用 command.execute 方法。</p>
+<p>用 闭包实现的命令模式如下代码所示:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> setCommand = <span class="function"><span class="keyword">function</span>(<span class="params"> button, func </span>)</span>&#123;</span><br><span class="line">  button.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    func();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MenuBar = &#123;</span><br><span class="line">  refresh: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'刷新菜单界面'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> RefreshMenuBarCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    receiver.refresh();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> refreshMenuBarCommand = RefreshMenuBarCommand(MenuBar);</span><br><span class="line"></span><br><span class="line">setCommand(button1, refreshMenuBarCommand);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当然，如果想更明确地表达当前正在使用命令模式，或者除了执行命令之外，将来有可能还 要提供撤销命令等操作。那我们最好还是把执行函数改为调用 execute 方法:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> RefreshMenuBarCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      receiver.refresh();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> setCommand = <span class="function"><span class="keyword">function</span> (<span class="params">button, comand</span>) </span>&#123;</span><br><span class="line">  button.onClick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    command.execute();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> refreshMenuBarCommand = RefreshMenuBarCommand(MenuBar);</span><br><span class="line"></span><br><span class="line">setCommand(button1, refreshMenuBarCommand);</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、撤销命令"><a href="#4、撤销命令" class="headerlink" title="4、撤销命令"></a>4、撤销命令</h2><p>命令模式的作用不仅是封装运算块，而且可以很方便地给命令对象增加撤销操作。就像订餐时客人可以通过电话来取消订单一样。</p>
+<p>撤销操作的实现一般是给命令对象增加一个名为 unexecude 或者 undo 的方法，在该方法里执行 execute 的反向操作。</p>
+<p>撤销是命令模式里一个非常有用的功能，试想一下开发一个围棋程序的时候，我们把每一步 棋子的变化都封装成命令，则可以轻而易举地实现悔棋功能。同样，撤销命令还可以用于实现文 本编辑器的 Ctrl+Z 功能。</p>
+<h2 id="5、撤销与重做"><a href="#5、撤销与重做" class="headerlink" title="5、撤销与重做"></a>5、撤销与重做</h2><p>很多时候，我们需要撤销一系列的命令。比如在一个围棋程序中，现在已经下了 10 步棋，我们需要一次性悔棋到第 5 步。</p>
+<p>在这之前，我们可以把所有执行过的下棋命令都储存在一个历史列表中，然后倒序循环来依次执行这些命令的 undo 操作，直到循环执行到第 5 个命令为止。</p>
+<p>然而，在某些情况下无法顺利地利用 undo 操作让对象回到 execute 之前的状态。比如在一个 Canvas 画图的程序中，画布上有一些点，我们在这些点之间画了 N 条曲线把这些点相互连接起 来，当然这是用命令模式来实现的。但是我们却很难为这里的命令对象定义一个擦除某条曲线的 undo 操作，因为在 Canvas 画图中，擦除一条线相对不容易实现。</p>
+<p>这时候最好的办法是先清除画布，然后把刚才执行过的命令全部重新执行一遍，这一点同样 可以利用一个历史列表堆栈办到。记录命令日志，然后重复执行它们，这是逆转不可逆命令的一 个好办法。</p>
+<p>命令模式可以用来实现播放录像功能。原理跟 Canvas 画图的例子一样，我们把用户在键盘的输入都封装成命令，执行过的命令将被存放到堆栈中。播放录像的时候只需要从头开始依次执行这些命令便可，代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"replay"</span>&gt;</span>播放录像<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> Ryu = &#123;</span></span><br><span class="line"><span class="javascript">    attact: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">'攻击'</span>);</span></span><br><span class="line">    &#125;,</span><br><span class="line"><span class="javascript">    defense: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">'防御'</span>);</span></span><br><span class="line">    &#125;,</span><br><span class="line"><span class="javascript">    jump: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">'跳跃'</span>);</span></span><br><span class="line">    &#125;,</span><br><span class="line"><span class="javascript">    crouch: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">'蹲下'</span>);</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> makeCommand = <span class="function"><span class="keyword">function</span> (<span class="params">receiver, state</span>) </span>&#123; <span class="comment">// 创建命令</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line">      receiver[state]();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> commands = &#123;</span></span><br><span class="line"><span class="javascript">    <span class="string">"119"</span>: <span class="string">"jump"</span>, <span class="comment">// W</span></span></span><br><span class="line"><span class="javascript">    <span class="string">"115"</span>: <span class="string">"crouch"</span>, <span class="comment">// S</span></span></span><br><span class="line"><span class="javascript">    <span class="string">"97"</span>: <span class="string">"defense"</span>, <span class="comment">// A</span></span></span><br><span class="line"><span class="javascript">    <span class="string">"100"</span>: <span class="string">"attack"</span> <span class="comment">// D</span></span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> commandStack = []; <span class="comment">// 保存命令的堆栈</span></span></span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="built_in">document</span>.onkeypress = <span class="function"><span class="keyword">function</span> (<span class="params">ev</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> keyCode = ev.keyCode,</span></span><br><span class="line">        command = makeCommand(Ryu, commands[keyCode]);</span><br><span class="line"></span><br><span class="line"><span class="javascript">    <span class="keyword">if</span> (command) &#123;</span></span><br><span class="line"><span class="javascript">      command(); <span class="comment">// 执行命令</span></span></span><br><span class="line"><span class="javascript">      commandStack.push(command); <span class="comment">// 将刚刚执行过的命令保存进堆栈</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="built_in">document</span>.getElementById(<span class="string">'replay'</span>).onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// 点击播放录像</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> command;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">while</span>( command = commandStack.shift()) &#123;</span></span><br><span class="line">      command();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，当我们在键盘上敲下 W、A、S、D 这几个键来完成一些动作之后，再按下 Replay 按钮，此时便会重复播放之前的动作。</p>
+<h2 id="6、命令队列"><a href="#6、命令队列" class="headerlink" title="6、命令队列"></a>6、命令队列</h2><p>在订餐的故事中，如果订单的数量过多而厨师的人手不够，则可以让这些订单进行排队处理。 第一个订单完成之后，再开始执行跟第二个订单有关的操作。</p>
+<h2 id="7、宏命令"><a href="#7、宏命令" class="headerlink" title="7、宏命令"></a>7、宏命令</h2><p>宏命令是一组命令的集合，通过执行宏命令的方式，可以一次执行一批命令。想象一下，家 里有一个万能遥控器，每天回家的时候，只要按一个特别的按钮，它就会帮我们关上房间门，顺便打开电脑并登录 QQ。</p>
+<p>下面我们看看如何逐步创建一个宏命令。首先，我们依然要创建好各种 Command:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> closeDoorCommand = &#123;</span><br><span class="line">  execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'关门'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> openPcCommand = &#123;</span><br><span class="line">  execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开电脑'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> openQQCommand = &#123;</span><br><span class="line">  execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'登录QQ'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来定义宏命令 MacroCommand，它的结构也很简单。macroCommand.add 方法表示把子命令添加进宏命令对象，当调用宏命令对象的 execute 方法时，会迭代这一组子命令对象，并且依次执 行它们的 execute 方法:</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MacroCommand = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    commandsList: [],</span><br><span class="line">    add: <span class="function"><span class="keyword">function</span> (<span class="params">command</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">      <span class="keyword">this</span>.commandsList.push(command);</span><br><span class="line">    &#125;,</span><br><span class="line">    execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, command; command = <span class="keyword">this</span>.commandsList[i++];) &#123;</span><br><span class="line">        command.execute();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> macroCommand = MacroCommand();</span><br><span class="line"></span><br><span class="line">macroCommand.add( closeDoorCommand );</span><br><span class="line">macroCommand.add( openPcCommand );</span><br><span class="line">macroCommand.add( openQQCommand );</span><br><span class="line"></span><br><span class="line">macroCommand.execute();</span><br></pre></td></tr></table></figure>
+
+<p>当然我们还可以为宏命令添加撤销功能，跟 macroCommand.execute 类似，当调用macroCommand.undo 方法时，宏命令里包含的所有子命令对象要依次执行各自的 undo 操作。</p>
+<p>宏命令是命令模式与组合模式的联用产物。</p>
+<h2 id="8、智能命令与傻瓜命令"><a href="#8、智能命令与傻瓜命令" class="headerlink" title="8、智能命令与傻瓜命令"></a>8、智能命令与傻瓜命令</h2><p>再看一下我们在 9.7 节创建的命令:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> closeDoorCommand = &#123;</span><br><span class="line">  execute: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'关门'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>很奇怪，closeDoorCommand 中没有包含任何 receiver 的信息，它本身就包揽了执行请求的行为，这跟我们之前看到的命令对象都包含了一个 receiver 是矛盾的。</p>
+<p>一般来说，命令模式都会在 command 对象中保存一个接收者来负责真正执行客户的请求，这种情况下命令对象是“傻瓜式”的，它只负责把客户的请求转交给接收者来执行，这种模式的好处是请求发起者和请求接收者之间尽可能地得到了解耦。</p>
+<p>但是我们也可以定义一些更“聪明”的命令对象，“聪明”的命令对象可以直接实现请求， 这样一来就不再需要接收者的存在，这种“聪明”的命令对象也叫作智能命令。没有接收者的智能命令，退化到和<strong>策略模式</strong>非常相近，从代码结构上已经无法分辨它们，能分辨的只有它们意图的不同。策略模式指向的问题域更小，所有策略对象的目标总是一致的，它们只是达到这个目标的不同手段，它们的内部实现是针对“算法”而言的。</p>
+<p>而智能命令模式指向的问题域更广，command 对象解决的目标更具发散性。命令模式还可以完成撤销、排队等功能。</p>
+<h2 id="9、小结"><a href="#9、小结" class="headerlink" title="9、小结"></a>9、小结</h2><p>本章我们学习了命令模式。跟许多其他语言不同，JavaScript 可以用高阶函数非常方便地实现命令模式。命令模式在 JavaScript 语言中是一种隐形的模式。</p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/07/27/命令模式/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
+    </div>
+  
+  
+  
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
+  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
+</div>
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/07/26/发布订阅模式/" target="_self">发布订阅模式</a>
+      </div>
+    
+    
+  </nav>
+
+   
+
+   
+
+</div>
+
+
+      <footer>
+  <p class="site-info">
+    博客已萌萌哒运行<span id="time-to-now"></span><span class="my-face">(●'◡'●)ﾉ♥</span>
+    <br>
+    Theme - <a href="https://github.com/dongyuanxin/theme-bmw">BMW</a> | Made With 💗 | Powered by <a href="https://godbmw.com/">GodBMW</a>
+    <br>
+    
+  </p>
+</footer>
+
+
+
+<script>
+const timeToNowDOM = document.querySelector("#time-to-now");
+const startTimestamp = new Date(2019, 7, 15).getTime();
+
+const updateTimeStr = () => {
+  let offset = parseInt(
+      (new Date().getTime() - startTimestamp) / 1000,
+      10
+    ),
+    day = Math.floor(offset / 86400),
+    hour = Math.floor((offset % 86400) / 3600),
+    minute = Math.floor(((offset % 86400) % 3600) / 60),
+    second = Math.floor(((offset % 86400) % 3600) % 60);
+  timeToNowDOM.innerHTML =
+    day + "天" + hour + "小时" + minute + "分钟" + second + "秒";
+  setTimeout(updateTimeStr, 500);
+}
+
+setTimeout(updateTimeStr, 500);
+</script>
+
+
+      <div class="back-to-top hidden">
+  <span>
+    <i class="iconfont icon-60"></i><span></span>%
+  </span>
+</div>
+
+<script>
+const updateIconToTop = percent => {
+  let dom = document.querySelector(".back-to-top span span");
+  dom.innerText = percent;
+  if(percent < 1) {
+    document.querySelector(".back-to-top").className = "back-to-top hidden";
+  } else {
+    document.querySelector(".back-to-top").className = "back-to-top";
+  }
+}
+
+const handleScoll = () => {
+  let isRunning = false;
+  return () => {
+    if (isRunning) return;
+    isRunning = true;
+    window.requestAnimationFrame(timestamp => {
+      let scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop,
+        scrollHeight =
+          document.documentElement.scrollHeight ||
+          document.body.scrollHeight,
+        clientHeight =
+          document.documentElement.clientHeight ||
+          document.body.clientHeight;
+      isRunning = false;
+      if (scrollTop <= 1) {
+        updateIconToTop(0);
+        return;
+      }
+      if (scrollTop + clientHeight >= scrollHeight) {
+        updateIconToTop(100);
+      } else {
+        updateIconToTop(parseInt(
+          100 * scrollTop / (scrollHeight - clientHeight),
+          10
+        ));
+      }
+    });
+  };
+}
+
+const backToTop = () => {
+  let scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop,
+    delay = 10,
+    time = 200;
+  if (scrollTop <= 20) {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    return;
+  }
+  let step = Math.ceil(scrollTop * delay / time);
+  let timer = setInterval(() => {
+    scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+    if (scrollTop - step <= 0) {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      clearInterval(timer);
+    } else {
+      document.documentElement.scrollTop = scrollTop - step;
+      document.body.scrollTop = scrollTop - step;
+    }
+  }, delay);
+}
+
+document.addEventListener("scroll", handleScoll(), false);
+
+document.querySelector(".back-to-top").addEventListener("click", backToTop, false);
+
+</script>
+
+    </div>
+
+    
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+<script>
+  (() => {
+    const mathjaxConfig = {
+      showProcessingMessages: false, //关闭js加载过程信息
+      messageStyle: "none", //不显示信息
+      jax: ["input/TeX", "output/HTML-CSS"],
+      tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]], //行内公式选择符
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]], //段内公式选择符
+        skipTags: ["script", "noscript", "style", "textarea", "pre", "code", "a"] //避开某些标签
+      },
+      "HTML-CSS": {
+        availableFonts: ["STIX", "TeX"], //可选字体
+        showMathMenu: false //关闭右击菜单显示
+      }
+    }
+
+    let mathjaxInterval = setInterval(() => {
+      if(!window.MathJax){
+        return;
+      }
+      window.MathJax.Hub.Config(mathjaxConfig)
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub, document.getElementById('app')])
+
+      clearInterval(mathjaxInterval)
+    }, 10)    
+  })()
+</script>
+    
+
+    <script src="https://cdn.bootcss.com/fancybox/3.5.2/jquery.fancybox.min.js" async></script>
+<script async>
+  let fancyTimer = setInterval(function(){
+    if(!window.$){
+      return;
+    }
+    $(document).ready(function() {
+      $(".post img").each(function () {
+        if($(this).parent().get(0).tagName.toLowerCase() === "a") {
+          return;
+        }
+        // $(this).attr("data-fancybox", "gallery"); // if you add 'data-fancybox', img will display after showed
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "gallery");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      });
+      
+      clearInterval(fancyTimer);
+    });
+  }, 10);
+</script>
+
+    
+  </body>
+
+</html>
