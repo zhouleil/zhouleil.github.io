@@ -221,7 +221,7 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h1 id="this、call、apply-和-bind"><a href="#this、call、apply-和-bind" class="headerlink" title="this、call、apply 和 bind"></a>this、call、apply 和 bind</h1><h2 id="1、this"><a href="#1、this" class="headerlink" title="1、this"></a>1、this</h2><p><strong>和别的语言大相径庭的是，Javascript的this总是指向一个对象，而具体指向哪个对象是在运行时基于函数的执行环境动态绑定的，而非函数声明时的环境。</strong></p>
+      <h2 id="1、this"><a href="#1、this" class="headerlink" title="1、this"></a>1、this</h2><p><strong>和别的语言大相径庭的是，Javascript的this总是指向一个对象，而具体指向哪个对象是在运行时基于函数的执行环境动态绑定的，而非函数声明时的环境。</strong></p>
 <h3 id="1-1、this的指向"><a href="#1-1、this的指向" class="headerlink" title="1.1、this的指向"></a>1.1、this的指向</h3><p>除去不常用的 with 和 eval 的情况，具体到实际应用中，this 的指向大致可以分为以下 4 种：</p>
 <blockquote>
 <ul>
@@ -274,6 +274,9 @@
 <h4 id="2、-借用其他对象的方法"><a href="#2、-借用其他对象的方法" class="headerlink" title="2、 借用其他对象的方法"></a>2、 借用其他对象的方法</h4><p>一、借用构造函数,通过这种技术，可以实现一些类似继承的效果</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span> (<span class="params"> name </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> B = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    A.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">B.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">new</span> B(<span class="string">'sven'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(b.getName())</span><br></pre></td></tr></table></figure>
 
+<h2 id="原文来自"><a href="#原文来自" class="headerlink" title="原文来自"></a>原文来自</h2><blockquote>
+<p>JavaScript设计模式与开发实践（曾探）</p>
+</blockquote>
 
     </div>
   </div>
