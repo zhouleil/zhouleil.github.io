@@ -8,12 +8,12 @@
   
   
   
-  <title>ssh与scp | zhouleil 的个人博客</title>
+  <title>js事件循环 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="后端,Linux,">
+    <meta name="keywords" content="前端,其他,">
   
 
   <script>
@@ -199,18 +199,18 @@
 
 <div class="post">
   <h1 class="article-title">
-    <span>ssh与scp</span>
+    <span>js事件循环</span>
   </h1>
   <div class="article-top-meta">
     <span>
       发布 : 
-      2019-10-19
+      2020-08-20
     </span>
     
       <span>
         分类 : 
-          <a href="/categories/后端/">
-            后端
+          <a href="/categories/前端/">
+            前端
           </a>
       </span>
     
@@ -221,30 +221,15 @@
 
   <div class="article-content">
     <div class="markdown-body">
-      <h3 id="1、ssh-命令连接服务器"><a href="#1、ssh-命令连接服务器" class="headerlink" title="1、ssh 命令连接服务器"></a>1、ssh 命令连接服务器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh 用户名@IP地址 -p 端口号</span><br></pre></td></tr></table></figure>
+      <h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'script 1'</span>)</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'timeOut1'</span>)</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then1'</span>)</span><br><span class="line">  &#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'then2'</span>)</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'timeOut2'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise1'</span>)</span><br><span class="line">  resolve()</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'timeOut3'</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'then4'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script 2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// script1 promise1 script2 then4 timeOut1 then1  then2 timeOut3 timeOut2</span></span><br></pre></td></tr></table></figure>
 
-<p>如果连接成功的话会提示你输入远程服务器的密码。全部成功之后SSH就会显示远程服务器的提示符，这时候就说明连接成功了。</p>
-<h3 id="2、scp-上传与下载文件"><a href="#2、scp-上传与下载文件" class="headerlink" title="2、scp 上传与下载文件"></a>2、scp 上传与下载文件</h3><ul>
-<li><h5 id="从服务器上下载文件"><a href="#从服务器上下载文件" class="headerlink" title="从服务器上下载文件"></a>从服务器上下载文件</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 用户名@host:文件的绝对路径 本机绝对路径</span><br></pre></td></tr></table></figure>
-
-<p>例子：<code>scp root@192.168.0.101:/root/test.txt /Users/home/</code></p>
-<p>从 ip 为192.168.0.101的服务器路径/root/test.txt 中的test.txt文件下载到本地/Users/home/ 目录中</p>
-</li>
-<li><h5 id="上传文件到服务器"><a href="#上传文件到服务器" class="headerlink" title="上传文件到服务器"></a>上传文件到服务器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 本机绝对路径 用户@host:绝对路径</span><br></pre></td></tr></table></figure>
-
-<p>例子:    <code>scp /var/www/test.text root@192.168.0.101:/var/www/</code> </p>
-<p>把本机/var/www/目录下的 test.text 文件上传到192.168.0.101 这台服务器上的/var/www/目录中</p>
-</li>
-<li><h5 id="从服务器下载目录-在scp后面加-r"><a href="#从服务器下载目录-在scp后面加-r" class="headerlink" title="从服务器下载目录(在scp后面加-r)"></a>从服务器下载目录(在scp后面加-r)</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r  用户@host:保存文件夹的绝对路径 本机文件夹的绝对路径</span><br></pre></td></tr></table></figure>
-
-<p>例子： <code>scp -r root@192.168.0.101:/var/www/test /var/www/</code></p>
-<p>把 192.168.0.101 这台服务器的 /var/www/test 目录 下载到本机的 /var/www 目录</p>
-</li>
-<li><h5 id="上传目录到服务器"><a href="#上传目录到服务器" class="headerlink" title="上传目录到服务器"></a>上传目录到服务器</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r 本机文件夹的绝对路径 用户@host:保存文件夹的绝对路径</span><br></pre></td></tr></table></figure>
-
-<p>例如：<code>scp -r /var/test root@192.168.0.101:/var/www/</code></p>
-<p>把本机 /var/test 目录上传到服务器的 /var/www/ 目录</p>
-</li>
+<p>代码执行过程</p>
+<p>1、主程序执行输出 script1 promise1 script2 （promise resolve 会立即执行）<br>2、主程序执行时 宏任务栈为 [‘timeOut1’, ‘timeOut3’]<br>3、主程序执行时 微任务栈为 [‘promise1’]<br>4、执行微任务 <code>promise1</code> 时进入 <code>promise1</code> then 方法 输出 then4， 清空微任务栈 []<br>5、执行宏任务 <code>timeOut1</code> , 输出 timeOut1,并添加微任务 [‘then1’, ‘then2’], 添加宏任务 [‘timeOut1’, ‘timeOut3’, ‘timeOut2’],执行完 <code>timeOut1</code>, 宏任务栈变为 [‘timeOut3’, ‘timeOut2’]<br>6、执行微任务 <code>then1</code>, 输出 then1； 执行微任务 <code>then2</code>, 输出 then2。清空微任务 []<br>7、执行宏任务 <code>timeOut3</code>, 输出 timeOut3。宏任务栈变为[‘timeOut2’]<br>8、执行宏任务 <code>timeOut2</code>, 输出 timeOut2。清空宏任务栈 []。</p>
+<p>执行完此段代码。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/33058983" target="_blank" rel="noopener">详解JavaScript中的Event Loop（事件循环）机制</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/30034547" target="_blank" rel="noopener">浏览器中的事件循环机制</a></li>
+<li><a href="https://www.cnblogs.com/dennisj/p/12550996.html" target="_blank" rel="noopener">setTimeout和setImmediate到底谁先执行，本文让你彻底理解Event Loop</a></li>
 </ul>
 
     </div>
@@ -257,7 +242,7 @@
         
           本文作者 : zhouleil <br/>
         
-        原文链接 : <a href="">http://yoursite.com/2019/10/19/ssh与scp/</a><br>
+        原文链接 : <a href="">http://yoursite.com/2020/08/20/js事件循环/</a><br>
         版权声明 : © 2019 zhouleil. All Rights Reserved. 
         </blockquote>
       </div>
@@ -303,15 +288,9 @@
       <div class="nav-pre">
         <i class="iconfont icon-prev"></i>
         上一篇:
-        <a href="/2019/09/28/硬连接和软连接/" target="_self">硬连接和软连接</a>
+        <a href="/2020/08/04/mac-终端打开-vs-code/" target="_self">mac 终端打开 vs-code</a>
       </div>
     
-    
-      <div class="nav-next">
-        下一篇:
-        <a href="/2019/10/21/js依次打印1、2、3、4、5/" target="_self">js依次打印1、2、3、4、5</a>
-        <i class="iconfont icon-next"></i>
-      </div>
     
   </nav>
 
