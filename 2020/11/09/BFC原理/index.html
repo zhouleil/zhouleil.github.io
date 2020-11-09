@@ -8,12 +8,12 @@
   
   
   
-  <title>归档: 2020/3 | zhouleil 的个人博客</title>
+  <title>BFC原理 | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="前端,CSS,">
   
 
   <script>
@@ -184,57 +184,138 @@
   })
 </script>
 
-      <div class="container">
-  <div class="timeline">
-  <span class="archive-move-on"></span>
-  <span class="archive-page-counter">
-    
-      <span>Wow! 一共有 41 篇文章</span>
-    
-  </span>
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
   
+
+<div class="post">
+  <h1 class="article-title">
+    <span>BFC原理</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-11-09
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
   
-    <div class="collection-title">
-      <h2>
-        <span>2020</span>
-      </h2>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h2 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h2><p>在讲解<code>BFC</code>之前, 我们先来了解一下常见的定位方案，定位方案是控制元素的布局，有三种常见的方案：</p>
+<ul>
+<li><p>普通流（normal flow）</p>
+<p>在普通流中元素按照其在 <code>HTML</code> 中的先后位置至上而下布局，在这个过程中，行内元素水平排列，直到当行被占满然后换行，<br>块级元素则会被渲染为完整的一个新行，除非另外指定，否则所有元素默认都是普通流定位，也可以说，普通流中元素的位置由<br>该元素在 <code>HTML</code>文档中的位置决定。</p>
+</li>
+<li><p>浮动（float）  </p>
+<p>在浮动布局中，元素首先按照普通流的位置出现，然后根据浮动的方向尽可能的向左边或者右边偏移，其效果与印刷排版中的文本环绕相似。</p>
+</li>
+<li><p>绝对定位（absolute positioning）</p>
+<p>在绝对定位布局中，元素会整体脱离普通流，因此绝对定位元素不会对其兄弟元素造成影响，而元素具体的位置由绝对定位的坐标决定。</p>
+</li>
+</ul>
+<h2 id="2、BFC-概念"><a href="#2、BFC-概念" class="headerlink" title="2、BFC 概念"></a>2、BFC 概念</h2><p><code>Formatting context</code>(格式化上下文)是 <code>W3C css2.1</code>规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了<br>其自元素将如何定位，以及和其他元素的关系和相互作用。</p>
+<p>那么<code>BFC</code>是什么呢？</p>
+<p><code>BFC</code> 即 <code>Block Formmatting Contexts</code>(块级格式化上下文)，它属于上述定位方案的普通流。<br><strong>具有BFC特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素，并且BFC具有普通容器所没有的一些特性</strong></p>
+<p>通俗一点来讲，可以把BFC理解为一个封闭的大箱子，箱子内部的元素无论如何翻江倒海，都不会影响到外部。</p>
+<h2 id="3、触发BFC"><a href="#3、触发BFC" class="headerlink" title="3、触发BFC"></a>3、触发BFC</h2><p>只要元素满足下面任一条即可触发<code>BFC</code>特性：</p>
+<ul>
+<li><code>body</code> 根元素</li>
+<li>浮动元素： <code>float</code> 除 <code>none</code> 以外的值</li>
+<li>绝对定位元素： <code>position(absolute、 fixed)</code></li>
+<li><code>display</code> 为 <code>inline-block、table-cells、flex</code></li>
+<li><code>overflow</code>除了 <code>visible</code> 以外的值（<code>hidden、auto、scroll</code>）</li>
+</ul>
+<h2 id="4、BFC-特性即应用"><a href="#4、BFC-特性即应用" class="headerlink" title="4、BFC 特性即应用"></a>4、BFC 特性即应用</h2><p>1、同一个 <code>BFC</code> 下外边距会发生折叠<br>2、<code>BFC</code> 可以包含浮动的元素（清除浮动）<br>3、<code>BFC</code> 可以阻止元素被浮动元素覆盖</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zhuanlan.zhihu.com/p/25321647" target="_blank" rel="noopener">10 分钟理解 BFC 原理</a></p>
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/11/09/BFC原理/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
     </div>
   
   
   
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2020/03/22/闭包与高阶函数/">
-          <span>闭包与高阶函数</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        03-22
-      </div>
-    </header>
-  </article>
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
   
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2020/03/20/this、call和apply/">
-          <span>this、call、apply 和 bind</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        03-20
-      </div>
-    </header>
-  </article>
-  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
 </div>
-  <nav class="page-navigation">
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/08/20/js事件循环/" target="_self">js事件循环</a>
+      </div>
     
     
   </nav>
+
+   
+
+   
+
 </div>
+
 
       <footer>
   <p class="site-info">
