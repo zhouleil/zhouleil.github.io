@@ -8,12 +8,12 @@
   
   
   
-  <title>归档: 2020/11 | zhouleil 的个人博客</title>
+  <title>字符串-startsWith | zhouleil 的个人博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw">
+    <meta name="keywords" content="前端,字符串,startsWith,">
   
 
   <script>
@@ -184,71 +184,134 @@
   })
 </script>
 
-      <div class="container">
-  <div class="timeline">
-  <span class="archive-move-on"></span>
-  <span class="archive-page-counter">
-    
-      <span>Wow! 一共有 43 篇文章</span>
-    
-  </span>
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
   
+
+<div class="post">
+  <h1 class="article-title">
+    <span>字符串-startsWith</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2020-11-22
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/前端/">
+            前端
+          </a>
+      </span>
+    
+    
+  </div>
+
   
-    <div class="collection-title">
-      <h2>
-        <span>2020</span>
-      </h2>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <p><code>startsWith()</code> 方法用来判断当前字符串是否以另外一个给定的字符串开头，并根据判断结果返回 <code>true</code> 和 <code>false</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">'Saturday night plans'</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(str1.starstWith(<span class="string">'Sat'</span>)) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(str1.startsWith(<span class="string">'Sat'</span>, <span class="number">3</span>)) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><blockquote>
+<p><code>str.startWith(searchString[, position])</code></p>
+</blockquote>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li><code>searchString</code><br>要搜索的字符串</li>
+<li><code>position</code>（可选）<br>在 <code>str</code> 中搜索 <code>searchString</code> 的开始位置，默认为 0.</li>
+</ul>
+<h3 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h3><p>如果字符串的开头找到了给定的字符串则返回 <code>true</code>; 否则返回 <code>false</code>.</p>
+<h2 id="Polyfill"><a href="#Polyfill" class="headerlink" title="Polyfill"></a>Polyfill</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="built_in">String</span>.prototype.startsWith) &#123;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(<span class="built_in">String</span>.prototype, <span class="string">'startsWith'</span>, &#123;</span><br><span class="line">    value: <span class="function"><span class="keyword">function</span> (<span class="params">search, pos</span>) </span>&#123;</span><br><span class="line">      pos = !pos || pos &lt; <span class="number">0</span> ? <span class="number">0</span> : +pos;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.substring(pos, pos + search.length) === search</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : zhouleil <br/>
+        
+        原文链接 : <a href="">http://yoursite.com/2020/11/22/字符串-startsWith/</a><br>
+        版权声明 : © 2019 zhouleil. All Rights Reserved. 
+        </blockquote>
+      </div>
     </div>
   
   
   
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2020/11/22/字符串-startsWith/">
-          <span>字符串-startsWith</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        11-22
-      </div>
-    </header>
-  </article>
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban, google, facebook, twitter" 
   
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2020/11/22/字符管-includes/">
-          <span>字符管-includes</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        11-22
-      </div>
-    </header>
-  </article>
-  
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/2020/11/09/BFC原理/">
-          <span>BFC原理</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        11-09
-      </div>
-    </header>
-  </article>
-  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
 </div>
-  <nav class="page-navigation">
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/startsWith/">
+              #startsWith
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/2020/11/22/字符管-includes/" target="_self">字符管-includes</a>
+      </div>
     
     
   </nav>
+
+   
+
+   
+
 </div>
+
 
       <footer>
   <p class="site-info">
